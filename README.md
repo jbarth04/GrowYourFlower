@@ -23,7 +23,7 @@ List of all the features that your team will implement (including which of the "
 
     Front-end framework (Bootstrap) to make the interface user friendly and look nice
 
-    Send emails, SMSes or push notifications as a daily reminder to “water your flower” if user is inactive for more than a day
+    Send emails, SMSes or push notifications as a daily reminder to “water your flower” if user is inactive for more than a day and a notification if you receive a message from another user
 
 What data will your prototype be using and collecting
 
