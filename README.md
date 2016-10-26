@@ -5,7 +5,7 @@
 
 Project Title
 
-    Grow your Flower 
+    Grow Your Flower 
 
 Problem statement (i.e., what is the problem?)
 
@@ -27,6 +27,7 @@ List of all the features that your team will implement (including which of the "
 
 What data will your prototype be using and collecting
 
+    User's account information - user name and password
     User's geo-location
     User input for custom categories of self care in addition to the existing categories
 
