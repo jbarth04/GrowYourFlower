@@ -1,0 +1,83 @@
+# DESIGN DOC
+# Comp20 Web Programming 
+# Final Project, Fall 2016
+# Team 9
+# By: Hannah Freedman, Josie Barth, Catherine Cowell, Elif Olmez
+
+Followed Norman Ramsey's design doc outline:
+
+    http://www.cs.tufts.edu/comp/40/handouts/design.pdf
+
+
+Problem statement. In one or two sentences, state the problem that your program will solve. Make it short and high-level: how would you tell your roommate? (This section helps verify that you have understood the problem.) 
+
+    We are trying to make a self-care app where a user documents acts of self-care that in turn “grow” a virtual flower
+
+
+Use cases. In a few sentences, say how your program will be used. Describe who or what will interact with your program: a person? Another program? Most important, show an example of how your program will be used, perhaps giving sample input and output. (This section helps solidify your understanding of the problem. It may also suggest a plan for testing your code.) 
+A person will interact with our program
+
+    If a user clicks a button that documents a self-care act (drinks water, sleeps more than 6 hours, etc), then the user’s virtual flower will be “watered”, it the flower “grows” to a new state.  Each flower can take 5 states - from seed, to growing bud, to partly sprouting, to some petals, to full petals
+
+    There are three main screens that the user interacts with
+
+        The first screen is the user’s “personal garden”
+
+        The second screen is a map that shows an “eco-system” of other user’s flowers tracked by 
+        their geo-location
+
+        The third screen is a login screen for the user
+
+
+Assumptions and constraints. Do you need to make assumptions about what sorts of input you expect—where input comes from, what happens after the program executes, or other constraint? (This section helps bring focus to open-ended problems. For simple, clearly stated problems it is of minimal use and should be short.)
+
+    We will have to keep track of the user’s login info
+
+        user name
+
+        Password
+
+        A database to store the user’s self-care acts
+
+        A predefined number of categories given in our interface that will translate to columns names in the MySQL database
+
+
+ Architecture. What are the major components in your system and what are their interfaces? How do components interact? From least formal to most formal, you might – Draw pictures – Sketch the contents of each interface using some sort of pseudocode – Write out interfaces in a suitable programming language Pseudocode is often a good path. (This section is the most important section and will take you the most time to write. It will help you develop a full understanding of the assignment and will also require serious thinking about how you plan to attack the problem.) 
+
+    Login page for the user
+
+    A “class” for a user - an object to represent a single user and store the user’s data
+
+    A database that stores all the data
+
+        User login
+
+        Button data
+
+        State of flowers
+
+        Stores the last geo-location of the user 
+
+    A suite of functions that allows the user to click buttons that documents acts of self-care
+
+    A google map page that renders an “ecosystem” of users (geo-location of the user) 
+
+    The front-end (using bootstrap)
+
+
+Implementation plan. What algorithms and/or data structures will each component need? Which pieces of your program will you build first? What will you build yourself? What will you reuse from a library? How long will each component take you? When will it be completed? Give dates and times!
+
+    We started this project on October 23st 2016 and it is due December 13th 2016
+        Josie - database work
+        Elif -
+        Hannah -
+        Cathy - 
+
+
+Test plan. How will you convince anybody (starting with yourself) that your program works? What test cases will you use? Be specific. Give examples of test cases. Plan for corner cases and error conditions. You will often need to write test code that does not have to be turned in as part of the assignment.
+
+    If a user clicks a button that documents an act-of self care, the flower should change from one state to the next, with five states the progress in a linear fashion
+
+    If a flower reaches state 5 (the last state), a new “seed” is automatically planted to the left of the fully sprouted flower
+
+    If the user clicks the eco-system page, they should see their correct geo-location on the map 
