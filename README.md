@@ -27,7 +27,7 @@ List of all the features that your team will implement (including which of the "
 
 What data will your prototype be using and collecting
 
-    User's account information - user name and password
+    User's account information - user name and password using Facebook API
     User's geo-location
     User input for custom categories of self care in addition to the existing categories
 
@@ -39,6 +39,7 @@ Any algorithms or special techniques that will be necessary
 What APIs we'll be using
 
     Weather - https://openweathermap.org/api
+    Facebook Login - https://developers.facebook.com/docs/facebook-login
 
 Electronic mockups of what your team will be developing using wireframes.
 
