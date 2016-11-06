@@ -2,13 +2,32 @@
 <html>
 
 <head>
-    <meta name="author" content="Josie Barth">
+    <meta name="author" content="Josie Barth, Hannah Freedman, Catherine Cowell, Elif Olmez">
     <meta name="description" content="Grow Your Flower">
+
   <link rel="stylesheet" type="text/css" href="stylesheets/main.css"/>
   <script src="/js/main.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  <script>var apiKey = '<%= process.env.WEATHER_API_KEY %>';</script>
+
 </head>
 
 <body>
+
+    <h1>What's the weather today?</h1>
+
+    <h3>Where are you?</h3>
+
+    <input class="search" type="text" placeholder="Enter city name..."/>
+    <button type="button" onclick="searchWeather()" >Search</button>
+
+    <div class="city"></div><div class="temp"></div><br>
+    <div class="precipitation"></div><br>
+    <div class="wind-speed"></div><br>
+    <div class="error-message"></div>
+
 
   <h1>Josie's Test</h1>
 

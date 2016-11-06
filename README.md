@@ -44,6 +44,11 @@ What APIs we'll be using
 Electronic mockups of what your team will be developing using wireframes.
 
     Please see file “Mockup Wireframe” for a PDF version of the mockups for our app
+
+Resources
+    How to protect API keys and use them LOCALLY
+        https://www.linkedin.com/pulse/protect-your-api-keys-using-environment-variables-nodejs-dale-corns
+
 #Comments By Ming
 * "User's account information - user name and password" - Please do not build or roll-your-own login system.  Use something established to save your time.
 * This idea is great, reminds me a lot of the Tamagotchi --remember those?
