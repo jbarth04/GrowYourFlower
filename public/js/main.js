@@ -1,21 +1,35 @@
 /* JavaScript functions for Grow My Flower */
 
+var myLat = 42.352;
+var myLon = -71.057;
+
 function myFunction() {
   document.getElementById("demo").innerHTML = "Here is a new paragraph #javascript #swag";
 }
 
-function getWeather(searchQuery) {
-    var url = 'http://api.openweathermap.org/data/2.5/weather?';
+function getLocation(){
+    if (navigator.geolocation) { 
+        navigator.geolocation.getCurrentPosition(function(position) {
+            myLat = position.coords.latitude;
+            myLon = position.coords.longitude;
+            getWeather();
+        });
+    }
+    else {
+        alert("Please enable geolocation on this browser");
+    }
+}
+
+
+function getWeather() {
+    var url = 'api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}';
     var params = {
+        lat: myLat,
+        lon: myLon,
         APPID: apiKey, // generated open weather map
         units: 'imperial'
     };
     
-    if (searchQuery) {
-            params.q = searchQuery;
-        } else {
-            params.id = 4930956;
-        }
     $.ajax(url + $.param(params), {
       success: function (data) {
         $('.city').text(data.name);
@@ -28,7 +42,3 @@ function getWeather(searchQuery) {
     });
 }
 
-function searchWeather() {
-    var searchQuery = $('.search').val(); // grab value from search input
-    getWeather(searchQuery);
-}
