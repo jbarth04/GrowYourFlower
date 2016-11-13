@@ -4,6 +4,11 @@ body {
 }
 
 h1 {
+	color = blue;
+}
+
+background-image {
+	opacity: 0.8;
 }
 
 p {

@@ -20,8 +20,13 @@ function getLocation(){
     }
 }
 
+// later: set api key to be hidden
+// heroku config:set API_KEY=97458c025fbdbfa7abff786be9f4829a
+// heroku config:get API_KEY -s >> .env
+
 
 function getWeather() {
+    console.log("here!");
     var url = 'api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}';
     var params = {
         lat: myLat,
