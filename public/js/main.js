@@ -1,12 +1,11 @@
 /* JavaScript functions for Grow My Flower */
 
-var myLat = 42.352;
-var myLon = -71.057;
 
 function myFunction() {
   document.getElementById("demo").innerHTML = "Here is a new paragraph #javascript #swag";
 }
 
+// TODO - see if necessary
 function getLocation(){
     if (navigator.geolocation) { 
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -20,21 +19,18 @@ function getLocation(){
     }
 }
 
-// later: set api key to be hidden
-// heroku config:set API_KEY=97458c025fbdbfa7abff786be9f4829a
-// heroku config:get API_KEY -s >> .env
-
-
-function getWeather() {
-    console.log("here!");
-    var url = 'api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}';
+function getWeather(searchQuery) {
+    var url = 'http://api.openweathermap.org/data/2.5/weather?';
     var params = {
-        lat: myLat,
-        lon: myLon,
         APPID: apiKey, // generated open weather map
         units: 'imperial'
     };
     
+    if (searchQuery) {
+            params.q = searchQuery;
+        } else {
+            params.id = 4930956;
+        }
     $.ajax(url + $.param(params), {
       success: function (data) {
         $('.city').text(data.name);
@@ -45,5 +41,10 @@ function getWeather() {
         $('.error-message').text('An error occurred!');
       }
     });
+}
+
+function searchWeather() {
+    var searchQuery = $('.search').val(); // grab value from search input
+    getWeather(searchQuery);
 }
 
