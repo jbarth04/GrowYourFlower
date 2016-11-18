@@ -1,7 +1,22 @@
 /* JavaScript functions for Grow My Flower */
 
+
 function myFunction() {
   document.getElementById("demo").innerHTML = "Here is a new paragraph #javascript #swag";
+}
+
+// TODO - see if necessary
+function getLocation(){
+    if (navigator.geolocation) { 
+        navigator.geolocation.getCurrentPosition(function(position) {
+            myLat = position.coords.latitude;
+            myLon = position.coords.longitude;
+            getWeather();
+        });
+    }
+    else {
+        alert("Please enable geolocation on this browser");
+    }
 }
 
 function getWeather(searchQuery) {
@@ -32,3 +47,4 @@ function searchWeather() {
     var searchQuery = $('.search').val(); // grab value from search input
     getWeather(searchQuery);
 }
+

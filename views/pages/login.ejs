@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Facebook Login JavaScript Example</title>
+  <title>Facebook Login JavaScript Example</title>
+  <script>var apiKey = '<%= process.env.FACEBOOK_API_KEY %>';</script>
 <meta charset="UTF-8">
 </head>
 <body>
 <script>
+
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
     console.log('statusChangeCallback');
@@ -40,7 +42,7 @@
 
   window.fbAsyncInit = function() {
   FB.init({
-    appId      : '{your-app-id}',
+    appId      : 355698054777209,
     cookie     : true,  // enable cookies to allow the server to access
                         // the session
     xfbml      : true,  // parse social plugins on this page
@@ -82,6 +84,10 @@
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
         'Thanks for logging in, ' + response.name + '!';
+        //sending data to server
+         var first_name = (response.name);
+         console.log(first_name);
+         $.post("localhost:5000/submit.json",{name:first_name});
     });
   }
 </script>
