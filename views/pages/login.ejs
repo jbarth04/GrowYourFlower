@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Facebook Login JavaScript Example</title>
+  <title>Facebook Login Page</title>
   <script>var apiKey = '<%= process.env.FACEBOOK_API_KEY %>';</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <meta charset="UTF-8">
 </head>
 <body>
 <script>
+//-----Most of the following code is courtesy of the facebook developer site---//
 
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
@@ -83,11 +85,11 @@
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
       document.getElementById('status').innerHTML =
+
         'Thanks for logging in, ' + response.name + '!';
         //sending data to server
-         var first_name = (response.name);
-         console.log(first_name);
-         $.post("localhost:5000/submit.json",{name:first_name});
+         var first_name = response.name;
+         $.post("http://localhost:5000/submit.json",{name:first_name});
     });
   }
 </script>
