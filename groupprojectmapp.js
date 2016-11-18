@@ -103,14 +103,14 @@ function startMap(position) {
 
   for (i = 1; i < 22; i++) { 
     var flowpos = {
-      lat : stops[i].stop_lat,
-      lng : stops[i].stop_lon,
+      lat : people_locs[i].stop_lat,
+      lng : people_locs[i].stop_lon,
     };
 
     var stopMarker = new google.maps.Marker({
       position: flowpos,
       map: map,
-      icon: "flower_icon.png"
+      icon: "flower.png"
     });
   }
   
