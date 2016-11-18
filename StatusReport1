@@ -1,0 +1,32 @@
+What was accomplished during the week:
+
+Cathy: Created a simple login page using the facebook API that posts some info about the user to the server to be used in our database.
+
+Josie: 
+1) setup mySQL and mySQL workbench locally 
+2) modified our index.js (our web server) and added the mySQL dependency to 
+    package.json
+3) successfully connected to mysql locally and was able to execute a mysql query
+    from index.js 
+4) practiced making the tables for our app locally on mySQL workbench - was able to successfully store and pull data from the tables
+
+Elif: I created a simple map with flower icons on hard-coded locations. 
+
+Hannah: I used OpenWeather API to format the background photos and worked on CSS styling for the myGarden homepage.
+
+
+Challenges faced during the week:
+
+Cathy: Configuring API vars and figuring out where to put the keys.
+
+Josie: Configuration!  There isn’t a ton of documentation for the figuration between clearDB, heroku, AND mySQL workbench.  A lot of time has been spent searching for useful information.  The best tutorial I found was on youtube (no sound but I was able to follow along) https://www.youtube.com/watch?v=US_wEKuWZ0U
+
+Goals for next week: 
+
+Cathy: Making the login page prettier, and integrating it with our index page as a layover that redirects to the user’s homepage after they are logged in. 
+
+Elif:  Get the flowers to be positioned in users’ locations
+
+Josie: Once I have all the configuration setup, I will create the tables to be available on clearDB to connect to heroku.  Then, on the web server side in index.js, I need to prepare the queries and set up the POST endpoints to retrieve/send data from/to client/server.
+
+Hannah: I will start the svg and d3 animations to grow the flowers in stages: seed, seedling, bud, flower! 
