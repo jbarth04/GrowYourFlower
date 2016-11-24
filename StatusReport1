@@ -30,3 +30,7 @@ Elif:  Get the flowers to be positioned in users’ locations
 Josie: Once I have all the configuration setup, I will create the tables to be available on clearDB to connect to heroku.  Then, on the web server side in index.js, I need to prepare the queries and set up the POST endpoints to retrieve/send data from/to client/server.
 
 Hannah: I will start the svg and d3 animations to grow the flowers in stages: seed, seedling, bud, flower! 
+
+#Comments by Ming
+* I'm really liking where this project is headed.
+* "Configuring API vars and figuring out where to put the keys." => store keys in environment variables. More: https://devcenter.heroku.com/articles/config-vars
