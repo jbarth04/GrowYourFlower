@@ -1,14 +1,17 @@
 var express = require('express');
 var app = express();
 
-app.set('port', (process.env.PORT || 5000));
+// TODO SEE SEND OF FILE
+// app.set('port', (process.env.PORT || 5000));
 
 // mySQL setup
 // TODO root user
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root'
+  host: 'us-cdbr-iron-east-04.cleardb.net',
+  user: 'b0bef3f366c73f',
+  password : '221b30e5',
+  database : 'heroku_2a6e207ec694c9c'
 });
 
 connection.connect();
@@ -20,25 +23,106 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+
 app.get('/', function(request, response) {
-  response.render('pages/index');
+
+    // Allow cross-origin resource sharing
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    response.render('pages/index');
 });
 
-app.get("/test", function(request, response) {
-    console.log("test");
 
-    connection.query('SELECT 1 + 1 AS solution', function (err, rows, fields) {
-      if (err) throw err
+app.get('/login', function(request, response) {
 
-      console.log('The solution is: ', rows[0].solution);
+    // Allow cross-origin resource sharing
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    response.render('pages/login');
+});
+
+// TODO - still testing nested async calls in login.ejs
+// request.body is still undefined
+app.post('/facebook', function(request, response) {
+
+    // Allow cross-origin resource sharing
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    console.log("in facebook");
+
+    console.log(request.body);
+
+    // var first_name = request.body.name;
+ //    var facebook_id = request.body.id;
+ //    console.log(first_name);
+ //    console.log(facebook_id);
+
+    response.status(200).send("in /facebook server");
+
+});
+
+// Josie's test operations table
+app.get("/operations", function(request, response) {
+
+    connection.query('SELECT * FROM operations ORDER BY id ASC', function (err, rows, fields) {
+        if (err) {
+
+            console.log('error: ', err);
+            throw err;
+        }
+        else {
+            console.log('The solution is: ', rows);
+        }
     })
 
-    connection.end();
+    // connection.end();
 
 });
 
-app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+
+// Josie's test flower_state table
+app.get("/flowerstate", function(request, response) {
+
+    connection.query('SELECT * FROM flower_state ORDER BY id ASC', function (err, rows, fields) {
+        if (err) {
+
+            console.log('error: ', err);
+            throw err;
+        }
+        else {
+            console.log('The solution is: ', rows);
+        }
+    })
+
+    // connection.end();
+
 });
 
+// Josie's test users table
+app.get("/users", function(request, response) {
+
+    connection.query('SELECT * FROM users ORDER BY id ASC', function (err, rows, fields) {
+        if (err) {
+
+            console.log('error: ', err);
+            throw err;
+        }
+        else {
+            console.log('The users are: ', rows);
+        }
+    })
+
+    // connection.end();
+
+});
+
+// app.listen(app.get('port'), function() {
+//   console.log('Node app is running on port', app.get('port'));
+// });
+
+// Oh joy! http://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
+app.listen(process.env.PORT || 5000);
 

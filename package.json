@@ -1,14 +1,19 @@
 {
-  "name": "node-js-getting-started",
+  "name": "comp20-f2016-team9",
   "version": "0.1.5",
-  "description": "A sample Node.js app using Express 4",
+  "description": "comp20-f2016-team9 group project",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "ejs": "2.3.3",
-    "express": "4.13.3"
+    "ejs": "2.4.1",
+    "express": "4.13.3",
+    "body-parser" : "latest",
+    "request" : "latest",
+    "validator":"latest",
+    "mysql": "latest",
+    "async": "latest"
   },
   "engines": {
     "node": "0.12.7"
