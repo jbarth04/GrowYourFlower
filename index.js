@@ -4,6 +4,14 @@ var app = express();
 // TODO SEE SEND OF FILE
 // app.set('port', (process.env.PORT || 5000));
 
+var http = require('http');
+var bodyParser = require('body-parser');
+var validator = require('validator'); // See documentation at https://github.com/chriso/validator.js
+
+// See https://stackoverflow.com/questions/5710358/how-to-get-post-query-in-express-node-js
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // Required if we need to use HTTP query or post parameters
+
 // mySQL setup
 // TODO root user
 var mysql = require('mysql');
@@ -17,7 +25,8 @@ var connection = mysql.createConnection({
 connection.connect();
 
 // Serve static content
-app.use(express.static(__dirname + '/public'));
+app.use(express.static('/public'));
+//app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -35,7 +44,7 @@ app.get('/', function(request, response) {
 
 
 app.get('/login', function(request, response) {
-
+    
     // Allow cross-origin resource sharing
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "X-Requested-With");

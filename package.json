@@ -13,7 +13,8 @@
     "request" : "latest",
     "validator":"latest",
     "mysql": "latest",
-    "async": "latest"
+    "async": "latest",
+    "http": "latest"
   },
   "engines": {
     "node": "0.12.7"
