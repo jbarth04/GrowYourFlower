@@ -52,8 +52,15 @@ app.get('/login', function(request, response) {
     response.render('pages/login');
 });
 
-// control flow
-//http://stackoverflow.com/questions/19035373/how-do-i-redirect-in-expressjs-while-passing-some-context
+// Move route middleware into named functions
+function homepage(request, response, next) {
+
+    console.log("in homepage flow control");
+    response.render('pages/index');
+    return next();
+}
+
+// Move route middleware into named functions
 function login(request, response, next) {
 
     // TODO
@@ -91,8 +98,10 @@ function login(request, response, next) {
                 // if new member, add to database
             }
 
+            // next renders the page with the user logged in
+            return next();
             // response.status(200).send("in /facebook server");
-            response.redirect('/');
+            // response.redirect('/');
         }
         else {
             response.status(500).send(err);
@@ -100,16 +109,20 @@ function login(request, response, next) {
     });
 
     // connection.end();
-
 }
 
-// TODO - still testing nested async calls in login.ejs
-// request.body is still undefined
-app.post('/facebook', login, function(request, response) {
+function allowCORS (request, response, next) {
 
     // Allow cross-origin resource sharing
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "X-Requested-With");
+    return next();
+}
+
+
+// READ control flow to understand parameters 'login' and 'homepage'
+//http://stackoverflow.com/questions/19035373/how-do-i-redirect-in-expressjs-while-passing-some-context
+app.post('/facebook', allowCORS, login, homepage, function(request, response) {
 
     console.log("in facebook");
 
