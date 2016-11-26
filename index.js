@@ -70,13 +70,13 @@ function login(request, response, next) {
     console.log(first_name);
     console.log(facebook_id);
 
-    var queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
-    console.log(queryStr);
+    var isUser_queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
+    console.log(isUser_queryStr);
 
     //create closure 
     //http://stackoverflow.com/questions/20693052/cursor-toarraycallback-does-not-return-an-array-of-documents
-    var isMember = function (callback) { // "callback" for asynchronous call 
-        connection.query(queryStr, function (err, rows, fields) {
+    var isUser = function (callback) { // "callback" for asynchronous call 
+        connection.query(isUser_queryStr, function (err, rows, fields) {
             if (err) {
                 callback(err);
             }
@@ -86,16 +86,41 @@ function login(request, response, next) {
         });
     };
 
-    isMember( function(err, rows, fields) {
-        if (!err) {
-            console.log(rows[0]["COUNT(users.facebook_id)"]);
-            var isMember = rows[0]["COUNT(users.facebook_id)"];
+    var addUser_queryStr = "INSERT INTO users (name, facebook_id) VALUES ('" + first_name + "', '" + facebook_id + "')";
+    console.log(addUser_queryStr);
 
-            if (isMember == 1) {
-                // if member exists
+    //create closure 
+    var addUser = function (callback) { // "callback" for asynchronous call 
+        connection.query(addUser_queryStr, function (err, rows, fields) {
+            if (err) {
+                callback(err);
             }
             else {
-                // if new member, add to database
+                callback(null, rows, fields);
+            }
+        });
+    };
+
+    isUser( function(err, rows, fields) {
+        if (!err) {
+            console.log(rows[0]["COUNT(users.facebook_id)"]);
+            var isUser = rows[0]["COUNT(users.facebook_id)"];
+
+            if (isUser == 1) {
+                // user exists in database
+            }
+            else {
+                // if new user, add to database
+                addUser(function (err2, row2, fields2) {
+
+                    if(!err) {
+                        console.log("success adding user");
+                    }
+                    else {
+                        response.status(500).send(err2);
+                    }
+
+                });
             }
 
             // next renders the page with the user logged in
