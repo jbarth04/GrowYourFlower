@@ -32,7 +32,7 @@ app.use(express.static('/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-
+// this is the root directory 
 app.get('/', function(request, response) {
 
     // Allow cross-origin resource sharing
@@ -42,9 +42,9 @@ app.get('/', function(request, response) {
     response.render('pages/index');
 });
 
-
+// testing login page
 app.get('/login', function(request, response) {
-    
+
     // Allow cross-origin resource sharing
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -64,12 +64,60 @@ app.post('/facebook', function(request, response) {
 
     console.log(request.body);
 
-    // var first_name = request.body.name;
- //    var facebook_id = request.body.id;
- //    console.log(first_name);
- //    console.log(facebook_id);
+    // TODO
+    var first_name = request.body.name;
+    var facebook_id = request.body.id;
+    facebook_id = facebook_id.toString();
+    console.log(first_name);
+    console.log(facebook_id);
 
-    response.status(200).send("in /facebook server");
+    var queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
+    console.log(queryStr);
+
+    // connection.query(queryStr, function (err, rows, fields) {
+    //     if (!err) {
+    //         console.log(rows[0]["COUNT(users.facebook_id)"]);
+    //         response.status(200).send("in /facebook server");
+    //     }
+    //     else {
+    //         response.statu(500).send(err);
+    //     }
+    // });
+
+    //create closure 
+    //http://stackoverflow.com/questions/20693052/cursor-toarraycallback-does-not-return-an-array-of-documents
+    var isMember = function (callback) { // "callback" for asynchronous call 
+        connection.query(queryStr, function (err, rows, fields) {
+            if (err) {
+                callback(err);
+            }
+            else {
+                callback(null, rows, fields);
+            }
+        });
+    };
+
+    isMember( function(err, rows, fields) {
+        if (!err) {
+            console.log(rows[0]["COUNT(users.facebook_id)"]);
+            var isMember = rows[0]["COUNT(users.facebook_id)"];
+
+            if (isMember == 1) {
+                // if member exists, then get the user's flower data
+            }
+            else {
+                // if new member, initialize in database
+
+            }
+
+            response.status(200).send("in /facebook server");
+        }
+        else {
+            response.statu(500).send(err);
+        }
+    });
+
+    // connection.end();
 
 });
 
@@ -85,7 +133,7 @@ app.get("/operations", function(request, response) {
         else {
             console.log('The solution is: ', rows);
         }
-    })
+    });
 
     // connection.end();
 
@@ -104,7 +152,7 @@ app.get("/flowerstate", function(request, response) {
         else {
             console.log('The solution is: ', rows);
         }
-    })
+    });
 
     // connection.end();
 
@@ -122,7 +170,7 @@ app.get("/users", function(request, response) {
         else {
             console.log('The users are: ', rows);
         }
-    })
+    });
 
     // connection.end();
 
