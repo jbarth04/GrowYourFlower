@@ -52,17 +52,9 @@ app.get('/login', function(request, response) {
     response.render('pages/login');
 });
 
-// TODO - still testing nested async calls in login.ejs
-// request.body is still undefined
-app.post('/facebook', function(request, response) {
-
-    // Allow cross-origin resource sharing
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
-
-    console.log("in facebook");
-
-    console.log(request.body);
+// control flow
+//http://stackoverflow.com/questions/19035373/how-do-i-redirect-in-expressjs-while-passing-some-context
+function login(request, response, next) {
 
     // TODO
     var first_name = request.body.name;
@@ -73,16 +65,6 @@ app.post('/facebook', function(request, response) {
 
     var queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
     console.log(queryStr);
-
-    // connection.query(queryStr, function (err, rows, fields) {
-    //     if (!err) {
-    //         console.log(rows[0]["COUNT(users.facebook_id)"]);
-    //         response.status(200).send("in /facebook server");
-    //     }
-    //     else {
-    //         response.statu(500).send(err);
-    //     }
-    // });
 
     //create closure 
     //http://stackoverflow.com/questions/20693052/cursor-toarraycallback-does-not-return-an-array-of-documents
@@ -103,21 +85,35 @@ app.post('/facebook', function(request, response) {
             var isMember = rows[0]["COUNT(users.facebook_id)"];
 
             if (isMember == 1) {
-                // if member exists, then get the user's flower data
+                // if member exists
             }
             else {
-                // if new member, initialize in database
-
+                // if new member, add to database
             }
 
-            response.status(200).send("in /facebook server");
+            // response.status(200).send("in /facebook server");
+            response.redirect('/');
         }
         else {
-            response.statu(500).send(err);
+            response.status(500).send(err);
         }
     });
 
     // connection.end();
+
+}
+
+// TODO - still testing nested async calls in login.ejs
+// request.body is still undefined
+app.post('/facebook', login, function(request, response) {
+
+    // Allow cross-origin resource sharing
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    console.log("in facebook");
+
+    console.log(request.body);
 
 });
 

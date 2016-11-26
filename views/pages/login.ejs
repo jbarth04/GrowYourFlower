@@ -102,12 +102,25 @@
         console.log(dataObj);
 
         // save the URL - TODO
-        var url = "http://localhost:5000/facebook";
+        var urlPost = "http://localhost:5000/facebook";
         // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
 
         // send the data to the web server
-        $.post(url, dataObj, function(data, textStatus) {
-            alert(data);
+        // control flow switches to homepage
+        $.post(urlPost, dataObj, function(data, textStatus) {
+
+            alert(textStatus);
+
+            // // get response - if 200 OK, either user already existed in the
+            // // database, or the user was added to the database
+            // if (textStatus == 200) {
+
+            //     // urlGet = "http://localhost:5000/";
+            //     // $.get()
+            // }
+            // else {
+            //     // there was an error
+            // }
         });
     });
   }
