@@ -10,6 +10,7 @@ Hannah: Continued coding the flower animations with four states: seed, seedling,
 
 Challenges faced during the week:
 
+
 Hannah: relearning d3.js !
 
 Cathy: Confusing errors from merge conflicts.
@@ -17,6 +18,7 @@ Cathy: Confusing errors from merge conflicts.
 Josie: mySQL configuration with Heroku - so many timeout errors…..
 
 Goals for next week:
+
 
 Josie: finishing the last tables for our database - Flowers and FlowerCare
 
