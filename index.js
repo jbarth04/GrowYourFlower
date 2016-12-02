@@ -23,19 +23,10 @@ var db_config = {
   password : '221b30e5',
   database : 'heroku_2a6e207ec694c9c'
 };
-// var connection = mysql.createConnection({
-//   host: 'us-cdbr-iron-east-04.cleardb.net',
-//   port: '3306',
-//   user: 'b0bef3f366c73f',
-//   password : '221b30e5',
-//   database : 'heroku_2a6e207ec694c9c'
-// });
-
-// connection.connect();
 
 // Serve static content
-app.use(express.static('/public'));
-//app.use(express.static(__dirname + '/public'));
+// app.use(express.static('/public'));
+app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -69,6 +60,23 @@ function handleDisconnect() {
 
 handleDisconnect();
 
+// Move route middleware into named functions
+function allowCORS (request, response, next) {
+
+    // Allow cross-origin resource sharing
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+    return next();
+}
+
+// Move route middleware into named functions
+function homepage(request, response, next) {
+
+    console.log("in homepage flow control");
+    response.render('pages/index');
+    return next();
+}
+
 
 // this is the root directory 
 app.get('/', function(request, response) {
@@ -76,12 +84,12 @@ app.get('/', function(request, response) {
     // Allow cross-origin resource sharing
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "X-Requested-With");
-
     response.render('pages/index');
 });
 
+
 // this is the root directory 
-app.get('/homepage', allowCORS, homepage, function(request, response) {
+app.get('/mygarden', allowCORS, homepage, function(request, response) {
 
     console.log("in homepage");
 });
@@ -96,18 +104,9 @@ app.get('/login', function(request, response) {
     response.render('pages/login');
 });
 
-// Move route middleware into named functions
-function homepage(request, response, next) {
-
-    console.log("in homepage flow control");
-    response.render('pages/index');
-    return next();
-}
 
 // Move route middleware into named functions
 function login(request, response, next) {
-
-    // connection.connect();
 
     // TODO
     var first_name = request.body.name;
@@ -143,43 +142,13 @@ function login(request, response, next) {
                     }
                 });
             }
-
-            // connection.end(function (end) {
-            //     console.log("ending query connection in login - success");
-            // });
-
             return next();
-
-            // console.log("before next");
-
-            // next renders the page with the user logged in
-            // return next();
-            // response.status(200).send("in /facebook server");
-            // response.redirect('/');
         }
         else {
-
-            // connection.end(function (end) {
-            //     console.log("ending query connection in login - error");
-            // });
-            console.log("error");
             response.status(500).send(err);
         }
     });
-
-    // connection.end(function (end) {
-    //     console.log("ending query connection in login");
-    // });
 }
-
-function allowCORS (request, response, next) {
-
-    // Allow cross-origin resource sharing
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
-    return next();
-}
-
 
 // READ control flow to understand parameters 'login' and 'homepage'
 //http://stackoverflow.com/questions/19035373/how-do-i-redirect-in-expressjs-while-passing-some-context
@@ -194,10 +163,6 @@ app.post('/facebook', allowCORS, login, function(request, response) {
 // Josie's test operations table
 app.get("/operations", function(request, response) {
 
-    // connection.connect(function (start) {
-    //     console.log("creating new connection in operations");
-    // });
-
     connection.query('SELECT * FROM operations ORDER BY id ASC', function (err, rows, fields) {
         if (err) {
 
@@ -207,18 +172,12 @@ app.get("/operations", function(request, response) {
         else {
             console.log('The solution is: ', rows);
         }
-
-        // connection.end(function (end) {
-        //     console.log("ending query connection in operations");
-        // });
     });
 });
 
 
 // Josie's test flower_state table
 app.get("/flowerstate", function(request, response) {
-
-    connection.connect();
 
     connection.query('SELECT * FROM flower_states ORDER BY id ASC', function (err, rows, fields) {
         if (err) {
@@ -229,17 +188,8 @@ app.get("/flowerstate", function(request, response) {
         else {
             console.log(rows);
             response.send(rows);
-            // connection.end(function(end) {
-            //   console.log("here");
-            //   response.send(rows);  
-            // });
         }
     });
-
-    connection.end(function (end) {
-        console.log("here");
-    });
-
 });
 
 // Josie's test users table
@@ -257,19 +207,7 @@ app.get("/users", function(request, response) {
             console.log('The users are: ', rows);
         }
     });
-
-    connection.end();
-
 });
-
-// connection.end(function (end) {
-//     console.log("ending overall connection");
-// });
-
-
-// app.listen(app.get('port'), function() {
-//   console.log('Node app is running on port', app.get('port'));
-// });
 
 // Oh joy! http://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
 app.listen(process.env.PORT || 5000);

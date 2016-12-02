@@ -109,8 +109,16 @@
         // control flow switches to homepage
         $.post(urlPost, dataObj, function(data, textStatus) {
 
-            // TODO
-            alert("in login :", data);
+            if (textStatus == 'success') {
+
+                console.log("here");
+                var urlMyGarden = "http://localhost:5000/mygarden";
+                window.location = urlMyGarden;
+            }
+            else {
+
+                alert("oh no! Something went wrong...");
+            }
         });
     });
   }
