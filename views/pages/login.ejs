@@ -97,6 +97,7 @@
 
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
+  //http://stackoverflow.com/questions/16430114/nested-fb-api-calls-not-firing-javascript-sdk
   function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
@@ -104,10 +105,34 @@
       document.getElementById('status').innerHTML =
 
         'Thanks for logging in, ' + response.name + '!';
+
         //sending data to server
-         var first_name = response.name;
-         $.post("http://localhost:5000/submit.json",{name:first_name});
-         window.location = "http://localhost:5000"
+
+         var first_name = (response.name).split(" ");
+         first_name = first_name[0]; // get the first name
+         var facebook_id = (response.id);
+         console.log(first_name);
+
+        // get the user info from the data
+        var dataObj = { id : facebook_id,
+                        name : first_name };
+
+        console.log(dataObj);
+
+        // save the URL - TODO
+        var urlPost = "http://localhost:5000/facebook";
+        // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+
+        // send the data to the web server
+        // control flow switches to homepage
+        $.post(urlPost, dataObj, function(data, textStatus) {
+
+            // TODO
+            alert("in login :", data);
+        });
+
+        //window.location = "http://localhost:5000"
+
     });
   }
 </script>
