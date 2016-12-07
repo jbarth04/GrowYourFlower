@@ -73,45 +73,91 @@ function allowCORS (request, response, next) {
 function homepage(request, response, next) {
 
     console.log("in homepage flow control");
-    response.render('pages/index');
-    return next();
+
+    // Step 1: get the facebook_id from user
+    var facebook_id = request.query.facebook_id;
+    console.log(facebook_id);
+
+    // TODO causing errors?
+    // facebook_id = facebook_id.toString();
+    // facebook_id = facebook_id.replace(/[^\w\s]/gi, '');
+
+
+    // Step 2: check if query was empty
+    // render the login page if user no credentials were sent
+    if (request.query && typeof request.query.facebook_id === 'undefined') {
+
+        response.render('pages/login');
+    }
+
+    // check if user is in database 
+    else {
+
+        // query string for checking if user exists
+        var isUser_queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
+        console.log(isUser_queryStr);
+
+        connection.query(isUser_queryStr, function (err, rows, fields) {
+        if (!err) {
+            console.log(rows[0]["COUNT(users.facebook_id)"]);
+            var isUser = rows[0]["COUNT(users.facebook_id)"];
+
+            if (isUser == 1) {
+                // user exists in database, render their homepage
+                response.render('pages/index');
+            }
+            else {
+                // user does not exist in database - make them login
+                response.render('pages/login');
+                
+            }
+            return next();
+        }
+        else {
+            response.status(500).send(err);
+        }
+        });
+    }
 }
 
 
-// this is the root directory 
+// this is the root directory - to login page
 app.get('/', function(request, response) {
 
     // Allow cross-origin resource sharing
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "X-Requested-With");
-    response.render('pages/index');
+    response.render('pages/login');
 });
 
-
-// this is the root directory 
-app.get('/mygarden', allowCORS, homepage, function(request, response) {
-
-    console.log("in homepage");
-});
-
-// testing login page
+// to login page
 app.get('/login', function(request, response) {
 
     // Allow cross-origin resource sharing
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Headers", "X-Requested-With");
-
     response.render('pages/login');
 });
 
+// main homepage for user with flowers
+// example end of URL : ..../mygarden?facbeook_id="1234567890"
+app.get('/mygarden', allowCORS, homepage, function(request, response) {
+
+    console.log("in my garden");
+});
 
 // Move route middleware into named functions
 function login(request, response, next) {
 
-    // TODO
     var first_name = request.body.name;
     var facebook_id = request.body.id;
     facebook_id = facebook_id.toString();
+
+    //security: remove all special characters
+    first_name = first_name.replace(/[^\w\s]/gi, '');
+    facebook_id = facebook_id.replace(/[^\w\s]/gi, '');
+
+    // TODO
     console.log(first_name);
     console.log(facebook_id);
 
@@ -211,4 +257,3 @@ app.get("/users", function(request, response) {
 
 // Oh joy! http://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
 app.listen(process.env.PORT || 5000);
-
