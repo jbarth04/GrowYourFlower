@@ -141,8 +141,16 @@
                                  // control flow switches to homepage
                                  $.post(urlPost, dataObj, function(data, textStatus) {
 
-                                     // TODO
-                                     alert("in login :", data);
+                                     if (textStatus == 'success') {
+
+                                         console.log("here");
+                                         var urlMyGarden = "http://localhost:5000/mygarden";
+                                         window.location = urlMyGarden + "?facebook_id=" + facebook_id;
+                                     }
+                                     else {
+
+                                         alert("oh no! Something went wrong...");
+                                     }
                                  });
 
 
@@ -166,8 +174,16 @@
                          // control flow switches to homepage
                          $.post(urlPost, dataObj, function(data, textStatus) {
 
-                             // TODO
-                             alert("in login :", data);
+                             if (textStatus == 'success') {
+
+                                 console.log("here");
+                                 var urlMyGarden = "http://localhost:5000/mygarden";
+                                 window.location = urlMyGarden + "?facebook_id=" + facebook_id;
+                             }
+                             else {
+
+                                 alert("oh no! Something went wrong...");
+                             }
                          });
 
 
@@ -198,6 +214,20 @@
         // });
         //
         // //window.location = "http://localhost:5000"
+
+        // get the user info from the data
+        /*var dataObj = { id : facebook_id,
+                        name : first_name };
+
+        console.log(dataObj);
+
+        // save the URL - TODO
+        */
+        var urlPost = "http://localhost:5000/facebook";
+        // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+
+        // send the data to the web server
+        // control flow switches to homepage
 
     });
   }
