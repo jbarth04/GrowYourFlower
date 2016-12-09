@@ -113,9 +113,14 @@
          var facebook_id = (response.id);
          console.log(first_name);
 
+         var lat = 0.0;
+         var lng = 0.0;
+
         // get the user info from the data
         var dataObj = { id : facebook_id,
-                        name : first_name };
+                        name : first_name,
+                        lat : lat,
+                        lng : lng };
 
         console.log(dataObj);
 

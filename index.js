@@ -98,24 +98,24 @@ function homepage(request, response, next) {
         console.log(isUser_queryStr);
 
         connection.query(isUser_queryStr, function (err, rows, fields) {
-        if (!err) {
-            console.log(rows[0]["COUNT(users.facebook_id)"]);
-            var isUser = rows[0]["COUNT(users.facebook_id)"];
+            if (!err) {
+                console.log(rows[0]["COUNT(users.facebook_id)"]);
+                var isUser = rows[0]["COUNT(users.facebook_id)"];
 
-            if (isUser == 1) {
-                // user exists in database, render their homepage
-                response.render('pages/index');
+                if (isUser == 1) {
+                    // user exists in database, render their homepage
+                    response.render('pages/index');
+                }
+                else {
+                    // user does not exist in database - make them login
+                    response.render('pages/login');
+                    
+                }
+                return next();
             }
             else {
-                // user does not exist in database - make them login
-                response.render('pages/login');
-                
+                response.status(500).send(err);
             }
-            return next();
-        }
-        else {
-            response.status(500).send(err);
-        }
         });
     }
 }
@@ -157,6 +157,9 @@ function login(request, response, next) {
     first_name = first_name.replace(/[^\w\s]/gi, '');
     facebook_id = facebook_id.replace(/[^\w\s]/gi, '');
 
+    var lat = request.body.lat;
+    var lng = request.body.lng;
+
     // TODO
     console.log(first_name);
     console.log(facebook_id);
@@ -165,8 +168,12 @@ function login(request, response, next) {
     var isUser_queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
     console.log(isUser_queryStr);
 
+    // query string to update user location
+    var updateUserLoc_queryStr = "UPDATE users SET lat='" + lat + "', lng='" + lng + "' WHERE facebook_id='" + facebook_id + "'";
+    console.log(updateUserLoc_queryStr);
+
     // query string to add user to user_table
-    var addUser_queryStr = "INSERT INTO users (name, facebook_id) VALUES ('" + first_name + "', '" + facebook_id + "')";
+    var addUser_queryStr = "INSERT INTO users (name, facebook_id, lat, lng) VALUES ('" + first_name + "', '" + facebook_id + "', '" + lat + "', '" + lng + "')";
     console.log(addUser_queryStr);
 
     connection.query(isUser_queryStr, function (err, rows, fields) {
@@ -174,14 +181,29 @@ function login(request, response, next) {
             console.log(rows[0]["COUNT(users.facebook_id)"]);
             var isUser = rows[0]["COUNT(users.facebook_id)"];
 
-            if (isUser == 1) {
-                // user exists in database
+            if (isUser == 1) { // user exists in database, update geo location
+                
+                //if geo-location was not able to be determined, keep as was before
+                if ((lat == 0.0) && (lng == 0.0)) {
+                    // do nothing
+                }
+                else {
+                    // update user geo-location
+                    connection.query(updateUserLoc_queryStr, function (err2, rows, fields) {
+                        if (err) {
+                            response.status(500).send(err2);
+                        }
+                        else {
+                            console.log("success updating user geo-location");
+                        }
+                    });
+                }
             }
             else {
                 // if new user, add to database
-                connection.query(addUser_queryStr, function (err2, rows, fields) {
+                connection.query(addUser_queryStr, function (err3, rows, fields) {
                     if (err) {
-                        response.status(500).send(err2);
+                        response.status(500).send(err3);
                     }
                     else {
                         console.log("success adding user");
