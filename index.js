@@ -90,7 +90,7 @@ function homepage(request, response, next) {
         response.render('pages/login');
     }
 
-    // check if user is in database 
+    // check if user is in database
     else {
 
         // query string for checking if user exists
@@ -109,7 +109,6 @@ function homepage(request, response, next) {
                 else {
                     // user does not exist in database - make them login
                     response.render('pages/login');
-                    
                 }
                 return next();
             }
@@ -182,7 +181,6 @@ function login(request, response, next) {
             var isUser = rows[0]["COUNT(users.facebook_id)"];
 
             if (isUser == 1) { // user exists in database, update geo location
-                
                 //if geo-location was not able to be determined, keep as was before
                 if ((lat == 0.0) && (lng == 0.0)) {
                     // do nothing
