@@ -3,6 +3,7 @@
 <head>
   <title>Grow Your Flower</title>
   <script>var apiKey = '<%= process.env.FACEBOOK_API_KEY %>';</script>
+  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 <% include ../partials/header %>
 <!-- <meta charset="UTF-8"> -->
@@ -98,7 +99,7 @@
   // Here we run a very simple test of the Graph API after login is
   // successful.  See statusChangeCallback() for when this call is made.
   //http://stackoverflow.com/questions/16430114/nested-fb-api-calls-not-firing-javascript-sdk
-  function testAPI() {
+ function testAPI() {
     console.log('Welcome!  Fetching your information.... ');
     FB.api('/me', function(response) {
       console.log('Successful login for: ' + response.name);
@@ -113,25 +114,90 @@
          var facebook_id = (response.id);
          console.log(first_name);
 
-        // get the user info from the data
-        var dataObj = { id : facebook_id,
-                        name : first_name };
+         var myLat = 0.0;
+         var myLng = 0.0;
+         console.log("here");
 
-        console.log(dataObj);
+         function getMyLocation() {
+                  console.log("fetching your location");
+                 if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+                         navigator.geolocation.getCurrentPosition(function(position) {
+                                 myLat = position.coords.latitude;
+                                 myLng = position.coords.longitude;
+                                 // get the user info from the data
+                                 var dataObj = { id : facebook_id,
+                                                 name : first_name,
+                                                 lat:   myLat,
+                                                 lng:   myLng
+                                                 };
 
-        // save the URL - TODO
-        var urlPost = "http://localhost:5000/facebook";
-        // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+                                 console.log(dataObj);
 
-        // send the data to the web server
-        // control flow switches to homepage
-        $.post(urlPost, dataObj, function(data, textStatus) {
+                                 // save the URL - TODO
+                                 var urlPost = "http://localhost:5000/facebook";
+                                 // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
 
-            // TODO
-            alert("in login :", data);
-        });
+                                 // send the data to the web server
+                                 // control flow switches to homepage
+                                 $.post(urlPost, dataObj, function(data, textStatus) {
 
-        //window.location = "http://localhost:5000"
+                                     // TODO
+                                     alert("in login :", data);
+                                 });
+
+
+                         });
+                 }
+                 else {
+                         alert("Geolocation is not supported by your web browser.  What a shame!");
+                         var dataObj = { id : facebook_id,
+                                         name : first_name,
+                                         lat:   myLat,
+                                         lng:   myLng
+                                         };
+
+                         console.log(dataObj);
+
+                         // save the URL - TODO
+                         var urlPost = "http://localhost:5000/facebook";
+                         // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+
+                         // send the data to the web server
+                         // control flow switches to homepage
+                         $.post(urlPost, dataObj, function(data, textStatus) {
+
+                             // TODO
+                             alert("in login :", data);
+                         });
+
+
+                 }
+         }
+
+         getMyLocation();
+
+
+        // // get the user info from the data
+        // var dataObj = { id : facebook_id,
+        //                 name : first_name
+        //
+        //                 };
+        //
+        // console.log(dataObj);
+        //
+        // // save the URL - TODO
+        // var urlPost = "http://localhost:5000/facebook";
+        // // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+        //
+        // // send the data to the web server
+        // // control flow switches to homepage
+        // $.post(urlPost, dataObj, function(data, textStatus) {
+        //
+        //     // TODO
+        //     alert("in login :", data);
+        // });
+        //
+        // //window.location = "http://localhost:5000"
 
     });
   }

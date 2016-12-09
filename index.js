@@ -80,6 +80,16 @@ app.get('/', function(request, response) {
     response.render('pages/index');
 });
 
+// map of users
+app.get('/map', function(request, response) {
+
+    // Allow cross-origin resource sharing
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "X-Requested-With");
+
+    response.render('pages/map');
+});
+
 // this is the root directory
 app.get('/homepage', allowCORS, homepage, function(request, response) {
 
