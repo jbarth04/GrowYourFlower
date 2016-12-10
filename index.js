@@ -1,8 +1,18 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 
-// TODO SEE SEND OF FILE
-// app.set('port', (process.env.PORT || 5000));
+// Serve static content
+// app.use(express.static('/public'));
+// app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(express.static(path.join(__dirname, 'comp20-f2016-team9')));
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
 
 var http = require('http');
 var bodyParser = require('body-parser');
@@ -23,15 +33,6 @@ var db_config = {
   password : '221b30e5',
   database : 'heroku_2a6e207ec694c9c'
 };
-
-// Serve static content
-// app.use(express.static('/public'));
-app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
 
 // The following is taken from:
 // http://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection

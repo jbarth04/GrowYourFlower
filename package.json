@@ -14,7 +14,8 @@
     "validator":"latest",
     "mysql": "latest",
     "async": "latest",
-    "http": "latest"
+    "http": "latest",
+    "path" : "latest"
   },
   "engines": {
     "node": "0.12.7"
