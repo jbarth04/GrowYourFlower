@@ -24,30 +24,30 @@
     <button type="button" onclick="updateActivity()">I saw a friend</button>&nbsp&nbsp
     <button type="button" onclick="updateActivity()">I drank water</button>&nbsp&nbsp
     <button type="button" onclick="updateActivity()">I made some art</button>&nbsp
-    <div id="garden"></div>
-
-
   </div>
+  
+  <div id="garden"></div>
 
-<script>
+<script type="text/javascript">
 
-  var dimension = 1100;
+  var ydimension = 500
+  var xdimension = $('body').width()
   var svg = d3.select('body').append('svg')
-    .attr('width', dimension)
-    .attr('height', dimension)
+    .attr('width', xdimension)
+    .attr('height', ydimension)
     // .style('background-color', 'white');
 
     // earth bottom
   svg.append("rect")
     .attr("id", "earth")
     .attr("fill", "#985B28")
-    .attr("width", dimension)
-    .attr("height", dimension/3)
+    .attr("width", xdimension)
+    .attr("height", ydimension/4)
     .attr("x", 0)
-    .attr("y", dimension - dimension/3)
+    .attr("y", ydimension - ydimension/4)
 
-  var cx = Math.floor(Math.random() * ((dimension - 20) - 20) + 20);
-  var cy = Math.floor(Math.random() * ((dimension - 20) - (dimension - dimension/3)) + (dimension - dimension/3));
+  var cx = Math.floor(Math.random() * ((xdimension - 20) - 20) + 20);
+  var cy = Math.floor(Math.random() * ((ydimension - 20) - (ydimension - ydimension/3)) + (ydimension - ydimension/3));
 
   var colors = ['rgba(237,120,120,1)', 'rgba(255,167,167,1)', 'rgba(198, 72, 72,1)', 'rgba(164, 38, 38,1)'];
 
