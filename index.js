@@ -152,6 +152,26 @@ app.get('/map', allowCORS, function(request, response) {
     response.render('pages/map');
 });
 
+// the locations of all the users
+app.get('/locations', allowCORS, function(request, response) {
+
+    // query string for all locations of users
+    var userLocations_queryStr = "SELECT name, lat, lng FROM users";
+    console.log(userLocations_queryStr);
+
+    connection.query(userLocations_queryStr, function (err, rows, fields) {
+        if (err) {
+            console.log('error: ', err);
+            throw err;
+        }
+        else {
+            console.log(rows);
+            response.send(rows);
+        }
+    });
+
+});
+
 // Move route middleware into named functions
 function login(request, response, next) {
 

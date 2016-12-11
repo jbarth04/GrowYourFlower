@@ -26,3 +26,6 @@ Goals for next week:
 
 
 Finishing the project!
+
+#Comments by Ming
+* How is d3.js?  What will it be used for?
