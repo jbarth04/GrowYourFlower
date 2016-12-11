@@ -163,8 +163,6 @@
                                      lng:   myLng
                                      };
 
-                     console.log(dataObj);
-
                      // save the URL - TODO
                      var urlPost = "http://localhost:5000/facebook";
                      // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
@@ -175,7 +173,6 @@
 
                          if (textStatus == 'success') {
 
-                             console.log("here");
                              var urlMyGarden = "http://localhost:5000/mygarden";
                              window.location = urlMyGarden + "?facebook_id=" + facebook_id;
                          }
