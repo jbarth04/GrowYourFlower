@@ -5,13 +5,15 @@
     <meta name="author" content="Josie Barth, Hannah Freedman, Catherine Cowell, Elif Olmez">
     <meta name="description" content="Grow Your Flower">
 
-  <link rel="stylesheet" href="../../public/stylesheets/main.css" type="text/css"/>
+  <link rel="stylesheet" href="../../public/stylesheets/main" type="text/css"/>
   <script>var apiKey = '<%= process.env.WEATHER_API_KEY %>';</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script lang="javascript" src="../../public/js/jquery-3.1.0.min.js"></script>
+  <script lang="javascript" src="../public/js/jquery-3.1.0.min.js"></script>
   <script lang="javascript" src="../../public/js/d3.min.js"></script>
   <script src="../../public/js/main.js"></script>
   <script src="../../public/js/flowergrowth.js"></script>
+<!--   <script src="comp20-f2016-team9/public/js/main.js"></script>
+  <script src="comp20-f2016-team9/public/js/flowergrowth.js"></script> -->
 
 </head>
 
@@ -86,7 +88,7 @@
     .attr("stroke", "#439B43")
     .attr("display", "none")
     .attr("points",  cx+","+(cy-2)+" "+
-            (cx-3)+","+(cy-10)+" "+ 
+            (cx-3)+","+(cy-10)+" "+
              cx+","+(cy-20)+" "+
              cx+","+(cy-30)+" "+
              cx+","+(cy-40)+" "+
@@ -111,32 +113,32 @@
             (cx+8)+","+(cy-10)+" "+
             (cx+3)+","+(cy-4)+" "+
              cx+","+(cy+2));
-  var petalColor = colors[Math.floor(Math.random() * colors.length)];   
+  var petalColor = colors[Math.floor(Math.random() * colors.length)];
 
   var petal1 = svg.append("polygon")
     .attr("class", "petal")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var petal2 = svg.append("polygon")
     .attr("class", "petal")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var petal3 = svg.append("polygon")
     .attr("class", "petal")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var petal4 = svg.append("polygon")
     .attr("class", "petal")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
    var petal5 = svg.append("polygon")
     .attr("class", "petal")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
 
   var bud = svg.append("ellipse")
@@ -168,7 +170,7 @@
       .duration(1500)
       .attr("display", "block")
       .attr("points",  cx+","+(cy-2)+" "+
-              (cx-3)+","+(cy-10)+" "+ 
+              (cx-3)+","+(cy-10)+" "+
                cx+","+(cy-20)+" "+
                cx+","+(cy-30)+" "+
                cx+","+(cy-40)+" "+
@@ -184,14 +186,14 @@
                cx+","+(cy+2));
   });
 
-  // seedling to bud 
+  // seedling to bud
   d3.select("svg").on("click", function() {
     budStem
       .transition()
       .delay(50)
       .duration(2000)
       .attr("points",  cx+","+(cy-2)+" "+
-               cx+","+(cy-10)+" "+ 
+               cx+","+(cy-10)+" "+
                cx+","+(cy-20)+" "+
                cx+","+(cy-30)+" "+
                cx+","+(cy-40)+" "+
@@ -204,9 +206,9 @@
               (cx-3)+","+(cy-270)+" "+
                cx+","+((cy-275))+" "+
               (cx-1)+","+(cy-250)+" "+
-              (cx-1)+","+(cy-225)+" "+ 
+              (cx-1)+","+(cy-225)+" "+
               (cx-1)+","+(cy-200)+" "+
-              (cx-1)+","+(cy-175)+" "+ 
+              (cx-1)+","+(cy-175)+" "+
               (cx-1)+","+(cy-150)+" "+
                cx+","+(cy-105)+" "+
               (cx+2)+","+(cy-100)+" "+
@@ -232,12 +234,12 @@
       .transition()
       .delay(1500)
       .duration(1000)
-      .attr("points", cx+","+(cy-275)+" "+(cx-8)+","+((cy-275)-14)+" "+(cx-10)+","+((cy-275)-32)+" "+cx+","+((cy-275)-42)+" "+(cx+12)+","+((cy-275)-38)+" "+(cx+12)+","+((cy-275)-18)+" "+cx+","+(cy-275)); 
+      .attr("points", cx+","+(cy-275)+" "+(cx-8)+","+((cy-275)-14)+" "+(cx-10)+","+((cy-275)-32)+" "+cx+","+((cy-275)-42)+" "+(cx+12)+","+((cy-275)-38)+" "+(cx+12)+","+((cy-275)-18)+" "+cx+","+(cy-275));
     petal2
       .transition()
       .delay(1500)
       .duration(2000)
-      .attr("points", (cx-5)+","+(cy-275)+" "+(cx-16)+","+((cy-275)-10)+" "+(cx-24)+","+((cy-275)-18)+" "+(cx-36)+","+((cy-275)-12)+" "+(cx-46)+","+(cy-275)+" "+(cx-36)+","+((cy-275)+18)+" "+(cx-20)+","+((cy-275)+14)+" "+(cx-5)+","+(cy-275));  
+      .attr("points", (cx-5)+","+(cy-275)+" "+(cx-16)+","+((cy-275)-10)+" "+(cx-24)+","+((cy-275)-18)+" "+(cx-36)+","+((cy-275)-12)+" "+(cx-46)+","+(cy-275)+" "+(cx-36)+","+((cy-275)+18)+" "+(cx-20)+","+((cy-275)+14)+" "+(cx-5)+","+(cy-275));
     petal3
       .transition()
       .delay(1500)

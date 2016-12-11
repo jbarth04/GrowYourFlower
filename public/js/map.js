@@ -8,9 +8,8 @@ function initMap() {
 
           startMap(mypos);
   });
-});
-
 }
+
 
 function startMap(position) {
 

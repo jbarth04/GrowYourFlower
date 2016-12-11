@@ -1,8 +1,24 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 
-// TODO SEE SEND OF FILE
-// app.set('port', (process.env.PORT || 5000));
+// Serve static content
+// app.use(express.static('/public'));
+// app.use(express.static(__dirname + '/public'));
+// app.use(express.static(path.join(__dirname, 'public')));
+
+//Serve static content for the app from the "public" directory in the application directory.
+app.use(express.static(__dirname + '/public'));
+
+// Mount the middleware at "/static" to serve static content only when their request path is prefixed with "/static".
+app.use('/images', express.static(__dirname + '/public'));
+app.use('/js', express.static(__dirname + '/public'));
+app.use('/stylesheets', express.static(__dirname + '/public'));
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
 
 var http = require('http');
 var bodyParser = require('body-parser');
@@ -23,15 +39,6 @@ var db_config = {
   password : '221b30e5',
   database : 'heroku_2a6e207ec694c9c'
 };
-
-// Serve static content
-// app.use(express.static('/public'));
-app.use(express.static(__dirname + '/public'));
-
-// views is directory for all template files
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-
 
 // The following is taken from:
 // http://stackoverflow.com/questions/20210522/nodejs-mysql-error-connection-lost-the-server-closed-the-connection
@@ -121,20 +128,14 @@ function homepage(request, response, next) {
 
 
 // this is the root directory - to login page
-app.get('/', function(request, response) {
+app.get('/', allowCORS, function(request, response) {
 
-    // Allow cross-origin resource sharing
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
     response.render('pages/login');
 });
 
 // to login page
-app.get('/login', function(request, response) {
+app.get('/login', allowCORS, function(request, response) {
 
-    // Allow cross-origin resource sharing
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
     response.render('pages/login');
 });
 
@@ -143,6 +144,32 @@ app.get('/login', function(request, response) {
 app.get('/mygarden', allowCORS, homepage, function(request, response) {
 
     console.log("in my garden");
+});
+
+// the map page
+app.get('/map', allowCORS, function(request, response) {
+
+    response.render('pages/map');
+});
+
+// the locations of all the users
+app.get('/locations', allowCORS, function(request, response) {
+
+    // query string for all locations of users
+    var userLocations_queryStr = "SELECT name, lat, lng FROM users";
+    console.log(userLocations_queryStr);
+
+    connection.query(userLocations_queryStr, function (err, rows, fields) {
+        if (err) {
+            console.log('error: ', err);
+            throw err;
+        }
+        else {
+            console.log(rows);
+            response.send(rows);
+        }
+    });
+
 });
 
 // Move route middleware into named functions
