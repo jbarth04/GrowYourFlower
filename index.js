@@ -5,9 +5,15 @@ var path = require('path');
 // Serve static content
 // app.use(express.static('/public'));
 // app.use(express.static(__dirname + '/public'));
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
-// app.use(express.static(path.join(__dirname, 'comp20-f2016-team9')));
+//Serve static content for the app from the "public" directory in the application directory.
+app.use(express.static(__dirname + '/public'));
+
+// Mount the middleware at "/static" to serve static content only when their request path is prefixed with "/static".
+app.use('/images', express.static(__dirname + '/public'));
+app.use('/js', express.static(__dirname + '/public'));
+app.use('/stylesheets', express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -122,20 +128,14 @@ function homepage(request, response, next) {
 
 
 // this is the root directory - to login page
-app.get('/', function(request, response) {
+app.get('/', allowCORS, function(request, response) {
 
-    // Allow cross-origin resource sharing
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
     response.render('pages/login');
 });
 
 // to login page
-app.get('/login', function(request, response) {
+app.get('/login', allowCORS, function(request, response) {
 
-    // Allow cross-origin resource sharing
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "X-Requested-With");
     response.render('pages/login');
 });
 
@@ -144,6 +144,12 @@ app.get('/login', function(request, response) {
 app.get('/mygarden', allowCORS, homepage, function(request, response) {
 
     console.log("in my garden");
+});
+
+// the map page
+app.get('/map', allowCORS, function(request, response) {
+
+    response.render('pages/map');
 });
 
 // Move route middleware into named functions
