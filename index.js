@@ -2,19 +2,8 @@ var express = require('express');
 var app = express();
 var path = require('path');
 
-// Serve static content
-// app.use(express.static('/public'));
-// app.use(express.static(__dirname + '/public'));
-// app.use(express.static(path.join(__dirname, 'public')));
-
 //Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
-
-
-// Mount the middleware at "/static" to serve static content only when their request path is prefixed with "/static".
-// app.use('/images', express.static(__dirname + '/public'));
-// app.use('/js', express.static(__dirname + '/public'));
-// app.use('/stylesheets', express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
