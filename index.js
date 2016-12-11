@@ -10,10 +10,11 @@ var path = require('path');
 //Serve static content for the app from the "public" directory in the application directory.
 app.use(express.static(__dirname + '/public'));
 
+
 // Mount the middleware at "/static" to serve static content only when their request path is prefixed with "/static".
-app.use('/images', express.static(__dirname + '/public'));
-app.use('/js', express.static(__dirname + '/public'));
-app.use('/stylesheets', express.static(__dirname + '/public'));
+// app.use('/images', express.static(__dirname + '/public'));
+// app.use('/js', express.static(__dirname + '/public'));
+// app.use('/stylesheets', express.static(__dirname + '/public'));
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
@@ -111,7 +112,9 @@ function homepage(request, response, next) {
 
                 if (isUser == 1) {
                     // user exists in database, render their homepage
-                    response.render('pages/index');
+                    // response.render('pages/index');
+
+                    response.render('pages/index', {data : JSON.stringify({'facebook_id' : facebook_id})});
                 }
                 else {
                     // user does not exist in database - make them login
@@ -154,7 +157,6 @@ app.get('/map', allowCORS, function(request, response) {
 
 // the locations of all the users
 app.get('/locations', allowCORS, function(request, response) {
-
     // query string for all locations of users
     var userLocations_queryStr = "SELECT name, lat, lng FROM users";
     console.log(userLocations_queryStr);
@@ -169,7 +171,6 @@ app.get('/locations', allowCORS, function(request, response) {
             response.send(rows);
         }
     });
-
 });
 
 // Move route middleware into named functions
