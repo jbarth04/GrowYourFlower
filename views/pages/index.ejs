@@ -12,7 +12,6 @@
   <script lang="javascript" src="./js/d3.min.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/flowergrowth.js"></script>
-
 </head>
 
 <body background = "/images/sunny-day.jpeg">
@@ -20,18 +19,20 @@
     <h1>My Garden</h1>
     <h3>Complete these activities to care for you and your garden</h3>
 
-    &nbsp<button type="button" onclick="updateActivity()">I ate breakfast</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I saw a friend</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I drank water</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I made some art</button>&nbsp
+    &nbsp<button type="button" onclick="updateActivity("ate")">I ate breakfast</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity("friend")">I saw a friend</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity("exercised")">I exercised</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity("other")">I made some art</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity("slept")">I slept 7 hours or more</button>&nbsp
   </div>
   
   <div id="garden"></div>
 
 <script type="text/javascript">
 
-  var ydimension = 500
+  var ydimension = 600
   var xdimension = $('body').width()
+  var height = $('body').height();
   var svg = d3.select('body').append('svg')
     .attr('width', xdimension)
     .attr('height', ydimension)
@@ -41,10 +42,12 @@
   svg.append("rect")
     .attr("id", "earth")
     .attr("fill", "#985B28")
+    .attr("position", "fixed")
+    .attr("bottom", 0)
     .attr("width", xdimension)
-    .attr("height", ydimension/4)
+    .attr("height", ydimension/3)
     .attr("x", 0)
-    .attr("y", ydimension - ydimension/4)
+    .attr("y", ydimension - ydimension/3)
 
   var cx = Math.floor(Math.random() * ((xdimension - 20) - 20) + 20);
   var cy = Math.floor(Math.random() * ((ydimension - 20) - (ydimension - ydimension/3)) + (ydimension - ydimension/3));
@@ -151,6 +154,7 @@
   // ***** FUNCTIONS ***** \\
 
   // nothing to seed
+  // if for user, flower state is nothing or blossomed, plantSeed(){}
   d3.select("svg").on("click", function() {
     seed
     .attr("display", "block")
