@@ -13,8 +13,7 @@
 	var svg = d3.select('body').append('svg')
 		.attr('width', xdimension)
 		.attr('height', ydimension)
-		// .style('background-color', 'white');
-
+		
 		// earth bottom
 	svg.append("rect")
 		.attr("id", "earth")
@@ -132,11 +131,11 @@
 	d3.select("svg").on("click", function() {
 		seed
 		.attr("display", "block")
-	});
+	//});
 
 
 	// seed to seedling
-	d3.select("svg").on("click", function() {
+	//d3.select("svg").on("click", function() {
 		seed
 		.attr("display", "block")
 
@@ -160,14 +159,15 @@
 							(cx+8)+","+(cy-10)+" "+
 							(cx+3)+","+(cy-4)+" "+
 							 cx+","+(cy+2));
-	});
+	//});
 
 	// seedling to bud 
-	d3.select("svg").on("click", function() {
+	//d3.select("svg").on("click", function() {
 		budStem
 			.transition()
 			.delay(50)
 			.duration(2000)
+			.attr("display", "block")
 			.attr("points",  cx+","+(cy-2)+" "+
 							 cx+","+(cy-10)+" "+ 
 							 cx+","+(cy-20)+" "+
@@ -202,10 +202,10 @@
 			.attr("cy", cy - 280)
 			.attr("rx", 8)
 			.attr("ry", 10)
-	});
+	//});
 
 	// bud to flower
-	d3.select("svg").on("click", function() {
+	//d3.select("svg").on("click", function() {
 		petal1
 			.transition()
 			.delay(1500)
