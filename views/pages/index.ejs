@@ -14,16 +14,15 @@
   <script src="/js/main.js"></script>
   <script src="/js/flowergrowth.js"></script>
 
-<!--   <script type="text/javascript">
-
+  <script type="text/javascript">
     $(document).ready(function() {
         
         console.log("in index.ejs");
-        var data = JSON.parse(#{data});
+        var data = '<%- JSON.stringify(data) %>';
         console.log(data);
 
     });
-  </script> -->
+  </script>
 
 </head>
 

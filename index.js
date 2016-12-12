@@ -103,7 +103,7 @@ function homepage(request, response, next) {
                     // user exists in database, render their homepage
                     // response.render('pages/index');
 
-                    response.render('pages/index', {data : JSON.stringify({'facebook_id' : facebook_id})});
+                    response.render('pages/index', {'data' : JSON.stringify({'facebook_id' : facebook_id})});
                 }
                 else {
                     // user does not exist in database - make them login
@@ -132,7 +132,7 @@ app.get('/login', allowCORS, function(request, response) {
 });
 
 // main homepage for user with flowers
-// example end of URL : ..../mygarden?facbeook_id="1234567890"
+// example end of URL : ..../mygarden?facebook_id=1234567890
 app.get('/mygarden', allowCORS, homepage, function(request, response) {
 
     console.log("in my garden");
@@ -144,8 +144,10 @@ app.get('/map', allowCORS, function(request, response) {
     response.render('pages/map');
 });
 
-// the locations of all the users
-app.get('/locations', allowCORS, function(request, response) {
+// Move route middleware into named functions
+function getAllUserLocs(request, response, next) 
+{
+
     // query string for all locations of users
     var userLocations_queryStr = "SELECT name, lat, lng FROM users";
     console.log(userLocations_queryStr);
@@ -160,6 +162,49 @@ app.get('/locations', allowCORS, function(request, response) {
             response.send(rows);
         }
     });
+
+}
+
+// the locations of all the users
+app.get('/locations', allowCORS, getAllUserLocs, function(request, response) 
+{
+    console.log("in user locations");
+});
+
+
+// the locations of all the users except for user passed
+// example end of URL : ..../otherslocations?facebook_id=1234567890
+app.get('/otherslocations', allowCORS, function(request, response) {
+
+
+    // Step 1: get the facebook_id from user
+    var facebook_id = request.query.facebook_id;
+    console.log(facebook_id);
+
+    // Step 2: check if query was empty
+    // if so, send all locations 
+    if (request.query && typeof request.query.facebook_id === 'undefined') {
+
+        return getAllUserLocs(request, response);
+    }
+
+    // Step 3: else, send all other use locations except the one specified
+    else {
+
+        // query string for checking if user exists
+        var Locs_queryStr = "SELECT name, lat, lng FROM users WHERE facebook_id !='" + facebook_id + "'";
+        console.log(Locs_queryStr);
+
+        connection.query(Locs_queryStr, function (err, rows, fields) {
+            if (!err) {
+                console.log(rows);
+                response.send(rows);   
+            }
+            else {
+                response.status(500).send(err);
+            }
+        });
+    }
 });
 
 // Move route middleware into named functions
@@ -222,8 +267,24 @@ function login(request, response, next) {
                     }
                     else {
                         console.log("success adding user");
+
+                        // add a new flower to database 
+                        var newFlr_queryStr = "INSERT INTO flowers (user_id, flower_state_id)";
+                        newFlr_queryStr += " VALUES ((SELECT id FROM users where facebook_id='" + facebook_id + "'), ";
+                        newFlr_queryStr += "(SELECT id from flower_states where state='seed'))"
+                        console.log(newFlr_queryStr);
+
+                        connection.query(newFlr_queryStr, function (err4, rows, fields) {
+                            if (err) {
+                                response.status(500).send(err4);
+                            }
+                            else {
+                                console.log("success adding a new flower for new user");
+                            }
+                        });
                     }
                 });
+
             }
             return next();
         }
@@ -240,6 +301,26 @@ app.post('/facebook', allowCORS, login, function(request, response) {
     response.status(200).send("in /facebook server");
 
     console.log(request.body);
+
+});
+
+// posts an act of self care for a user to the server, to be stored in database
+// example end of URL : ..../selfcare?facebook_id=1234567890&operation=slept
+app.post('/selfcare', allowCORS, function(request, response) 
+{
+    // Step 1: get user from data
+    // identifier of user
+    var facebook_id = request.body.facebook_id;
+    facebook_id = facebook_id.toString();
+
+    // act of self care (slept, ate, chilled with friends, etc.)
+    var operation = request.body.operation;
+
+    // Step 2: check if query was empty
+    if (request.query && typeof request.query.facebook_id === 'undefined') {
+
+        return getAllUserLocs(request, response);
+    }
 
 });
 
