@@ -15,11 +15,20 @@
 
   <script type="text/javascript">
     $(document).ready(function() {
-        
         console.log("in index.ejs");
-        var data = '<%- JSON.stringify(data) %>';
+        // var data = '<%- JSON.stringify(data) %>';
+
+        // get data passed from server that rendered index.js
+        var data = '<%- data %>';
         console.log(data);
 
+        // parse the data
+        data = JSON.parse(data);
+        console.log(data);
+
+        // get the facebook id
+        facebook_id = data["facebook_id"];
+        console.log(facebook_id);
     });
   </script>
 </head>
@@ -35,7 +44,7 @@
     <button type="button" onclick="updateActivity()">I made some art</button>&nbsp&nbsp
     <button type="button" onclick="updateActivity()">I slept 7 hours or more</button>&nbsp
   </div>
-  
+
   <div id="garden"></div>
 
 <script type="text/javascript">
@@ -98,7 +107,7 @@
     .attr("stroke", "#439B43")
     .attr("display", "none")
     .attr("points",  cx+","+(cy-2)+" "+
-            (cx-3)+","+(cy-10)+" "+ 
+            (cx-3)+","+(cy-10)+" "+
              cx+","+(cy-20)+" "+
              cx+","+(cy-30)+" "+
              cx+","+(cy-40)+" "+
@@ -123,32 +132,32 @@
             (cx+8)+","+(cy-10)+" "+
             (cx+3)+","+(cy-4)+" "+
              cx+","+(cy+2));
-  var petalColor = colors[Math.floor(Math.random() * colors.length)];   
+  var petalColor = colors[Math.floor(Math.random() * colors.length)];
 
   var petal1 = svg.append("polygon")
     .attr("class", "petal1")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var petal2 = svg.append("polygon")
     .attr("class", "petal2")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var petal3 = svg.append("polygon")
     .attr("class", "petal3")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var petal4 = svg.append("polygon")
     .attr("class", "petal4")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
    var petal5 = svg.append("polygon")
     .attr("class", "petal5")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
-    .attr("fill", petalColor) 
+    .attr("fill", petalColor)
 
   var bud = svg.append("ellipse")
     .attr("class", "bud")
@@ -199,7 +208,7 @@
       .duration(1500)
       .attr("display", "block")
       .attr("points",  cx+","+(cy-2)+" "+
-              (cx-3)+","+(cy-10)+" "+ 
+              (cx-3)+","+(cy-10)+" "+
                cx+","+(cy-20)+" "+
                cx+","+(cy-30)+" "+
                cx+","+(cy-40)+" "+
@@ -215,14 +224,20 @@
                cx+","+(cy+2));
   };
 
+<<<<<<< HEAD
   function growBud(){
     d3.select(".budStem")
+=======
+  // seedling to bud
+  d3.select("svg").on("click", function() {
+    budStem
+>>>>>>> 9d6a770ee06d1fdedafed363ae52b8e5213a9b7e
       .transition()
       .delay(50)
       .duration(2000)
       .attr("display", "block")
       .attr("points",  cx+","+(cy-2)+" "+
-               cx+","+(cy-10)+" "+ 
+               cx+","+(cy-10)+" "+
                cx+","+(cy-20)+" "+
                cx+","+(cy-30)+" "+
                cx+","+(cy-40)+" "+
@@ -235,9 +250,9 @@
               (cx-3)+","+(cy-270)+" "+
                cx+","+((cy-275))+" "+
               (cx-1)+","+(cy-250)+" "+
-              (cx-1)+","+(cy-225)+" "+ 
+              (cx-1)+","+(cy-225)+" "+
               (cx-1)+","+(cy-200)+" "+
-              (cx-1)+","+(cy-175)+" "+ 
+              (cx-1)+","+(cy-175)+" "+
               (cx-1)+","+(cy-150)+" "+
                cx+","+(cy-105)+" "+
               (cx+2)+","+(cy-100)+" "+
