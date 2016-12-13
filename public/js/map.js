@@ -65,8 +65,8 @@ function startMap(position) {
    }
 
   var map = new google.maps.Map(document.getElementById('canvas_map'), {
-    center: mypos,
-    zoom: 15
+    center: {lat: 42.407748, lng: -71.120276},
+    zoom: 16
   });
 
 
