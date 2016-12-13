@@ -25,7 +25,7 @@ List of all the features that your team will implement (including which of the "
 
     Send emails, SMSes or push notifications as a daily reminder to “water your flower” if user is inactive for more than a day and a notification if you receive a message from another user
     *****UPDATE*******
-    Instead of sending emails or other notifications to the user, our team will be using D3.js, a js framework for games as         our fourth "Pick 4"
+    Instead of sending emails or other notifications to the user, our team will be using D3.js, a js framework for games as our fourth "Pick 4"
 
 What data will your prototype be using and collecting
 
