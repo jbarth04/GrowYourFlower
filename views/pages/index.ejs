@@ -183,7 +183,9 @@ $(document).ready(function() {
 
 function updateActivity(activity) {
 
-    var urlGet = "http://localhost:5000/workingflower?facebook_id=" + facebook_id;
+    var urlGet = "https://secure-plains-74726.herokuapp.com/workingflower?facebook_id=" + facebook_id;
+    // var urlGet = "http://localhost:5000/workingflower?facebook_id=" + facebook_id;
+
     $.get(urlGet, function(data, textStatus){
       if (textStatus == 'success') {
 
@@ -194,8 +196,10 @@ function updateActivity(activity) {
            growFlower();
 
           var dataObj = {facebook_id : facebook_id, operation : activity};
-          var urlPost = "http://localhost:5000/selfcare";
-          // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+
+          // var urlPost = "http://localhost:5000/selfcare";
+          var urlPost = "https://secure-plains-74726.herokuapp.com/selfcare";
+
           $.post(urlPost, dataObj, function(data, textStatus) {
             if (textStatus == 'success') {
               console.log("index posted!");
@@ -214,6 +218,10 @@ function updateActivity(activity) {
   function growFlower(){
 
     if(flowerstage == 4){
+<<<<<<< HEAD
+=======
+        plantSeed();
+>>>>>>> adeb9c636b4e249091a31f39f3ba3fbb6dfdaa31
         growSeedling();
         growBud();
         growBlossom();
@@ -230,16 +238,15 @@ function updateActivity(activity) {
       }
       if(flowerstage == 1){
         plantSeed();
-        // growSeedling();
       }
       if(flowerstage == 2){
+        plantSeed();
         growSeedling();
-        // growBud();
       }
       if(flowerstage == 3){
-        // growSeedling();
+        plantSeed();
+        growSeedling();
         growBud();
-        // growBlossom();
         console.log("growBlossom")
       }  
   };

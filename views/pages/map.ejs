@@ -11,22 +11,16 @@
         padding: 0;
       }
       #canvas_map {
-        height: 75%;
         margin-top: 0px;
-      }
-      #mapholder{
-        top: 200px;
-        height: 800px;
-        width: auto;
+        height: 75%;
       }
       #gardenheader {
           background-color: rgba(204, 204, 204, 0.5);
           margin: 0px;
           padding-bottom: 30px;
-          position: absolute;
+          padding-top: 20px;
           text-align: center;
           width: 100%;
-          height: auto;
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
@@ -36,8 +30,8 @@
 
   </head>
   <body onload="initMap()" >
-    <div id="gardenheader"><h1>Community Garden</h1><h3>Hover to see your friend's status</h3>
-    <a href="/mygarden" id="navbutton">Back to My Garden ></a><br></div>
-    <div id="mapholder"><div id="canvas_map"></div></div>
+    <div id=gardenheader><h1>Community Garden</h1><h3>Hover to see your friend's status</h3>
+        <a href="/mygarden" id="navbutton">Back to My Garden ></a><br></div>
+    <div id="canvas_map"></div>
   </body>
 </html>

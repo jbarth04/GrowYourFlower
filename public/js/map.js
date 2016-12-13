@@ -35,12 +35,14 @@ function startMap(position) {
                lng : locations[i]["lng"],
               };
               var name = locations[i]["name"];
+              var status = locations[i]["state"];
+              var info = name+" has a "+status+" on the way!";
 
               var Marker = new google.maps.Marker({
                 position: flowerpos,
                 map: map,
                 icon: "../images/blue-flower.png",
-                title: name
+                title: info
               });
 
               markers += Marker;
