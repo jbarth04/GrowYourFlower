@@ -212,6 +212,9 @@ function updateActivity(activity) {
   function growFlower(){
 
     if(flowerstage == 4){
+        plantSeed();
+        growSeedling();
+        growBud();
         growBlossom();
 
         setTimeout(function(){        
@@ -226,16 +229,15 @@ function updateActivity(activity) {
       }
       if(flowerstage == 1){
         plantSeed();
-        // growSeedling();
       }
       if(flowerstage == 2){
+        plantSeed();
         growSeedling();
-        // growBud();
       }
       if(flowerstage == 3){
-        // growSeedling();
+        plantSeed();
+        growSeedling();
         growBud();
-        // growBlossom();
         console.log("growBlossom")
       }  
   };
