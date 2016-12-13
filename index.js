@@ -250,7 +250,7 @@ function login(request, response, next) {
                 else {
                     // update user geo-location
                     connection.query(updateUserLoc_queryStr, function (err2, rows, fields) {
-                        if (err) {
+                        if (err2) {
                             response.status(500).send(err2);
                         }
                         else {
@@ -262,26 +262,11 @@ function login(request, response, next) {
             else {
                 // if new user, add to database
                 connection.query(addUser_queryStr, function (err3, rows, fields) {
-                    if (err) {
+                    if (err3) {
                         response.status(500).send(err3);
                     }
                     else {
                         console.log("success adding user");
-
-                        // add a new flower to database 
-                        var newFlr_queryStr = "INSERT INTO flowers (user_id, flower_state_id)";
-                        newFlr_queryStr += " VALUES ((SELECT id FROM users where facebook_id='" + facebook_id + "'), ";
-                        newFlr_queryStr += "(SELECT id from flower_states where state='seed'))"
-                        console.log(newFlr_queryStr);
-
-                        connection.query(newFlr_queryStr, function (err4, rows, fields) {
-                            if (err) {
-                                response.status(500).send(err4);
-                            }
-                            else {
-                                console.log("success adding a new flower for new user");
-                            }
-                        });
                     }
                 });
 
@@ -304,24 +289,239 @@ app.post('/facebook', allowCORS, login, function(request, response) {
 
 });
 
+function addToFlowerCare(request, response, flower_id, operation)
+{
+    var getOperation_queryStr = "SELECT operations.id AS operation_id FROM operations WHERE operations.name = '" + operation + "'";
+    connection.query(getOperation_queryStr, function (err, rows, fields) {
+        if (err) {
+            response.status(500).send(err);
+        }
+        else {
+            console.log("success operation query");
+
+            if (rows.length > 0) {
+                // that operation exists
+                var operation_id = rows[0]["operation_id"];
+                var addToFlrCare_queryStr = "INSERT INTO flower_care (flower_id, operation_id)";
+                addToFlrCare_queryStr += " VALUES (" + flower_id + ", " + operation_id +")";
+                console.log(addToFlrCare_queryStr);
+
+                connection.query(addToFlrCare_queryStr, function (err2, rows, fields) {
+                    if (err2) {
+                        response.status(500).send(err2);
+                    }
+                    else {
+                        console.log("success inserting into flowercare for specified");
+                        response.status(200).send("success inserting into flowercare user!")
+                    }
+                });
+            }
+            else {
+                // that operation doesn't exist, store in database as "other"
+                var addToFlrCare_queryStr = "INSERT INTO flower_care (flower_id, operation_id)";
+                addToFlrCare_queryStr += " VALUES (" + flower_id + ", (SELECT operations.id FROM operations WHERE operations.name = 'other'))"
+                console.log(addToFlrCare_queryStr);
+
+                connection.query(addToFlrCare_queryStr, function (err3, rows, fields) {
+                    if (err3) {
+                        response.status(500).send(err3);
+                    }
+                    else {
+                        console.log("success inserting into flowercare for other");
+                        response.status(200).send("success inserting into flowercare user!")
+                    }
+                });
+            }
+        }
+    }); 
+}
+
 // posts an act of self care for a user to the server, to be stored in database
-// example end of URL : ..../selfcare?facebook_id=1234567890&operation=slept
+// need to give key/value pairs, example
+// {facebook_id : 1234567890, operation : slept}
 app.post('/selfcare', allowCORS, function(request, response) 
 {
     // Step 1: get user from data
     // identifier of user
     var facebook_id = request.body.facebook_id;
     facebook_id = facebook_id.toString();
+    console.log(facebook_id);
 
     // act of self care (slept, ate, chilled with friends, etc.)
     var operation = request.body.operation;
+    console.log(operation);
 
     // Step 2: check if query was empty
-    if (request.query && typeof request.query.facebook_id === 'undefined') {
+    // if facebook_id or operation is null, return empty JSON array
+    if ((request.query.facebook_id == 'undefined') || (request.query.operation == 'undefined')) {
 
-        return getAllUserLocs(request, response);
+        response.status(400).send("Error: cannot store null values for facebook_id or operation");
+        return;
     }
 
+    // query string for checking if user exists
+    var isUser_queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
+    console.log(isUser_queryStr);
+
+    connection.query(isUser_queryStr, function (err, rows, fields) {
+        if (!err) {
+            console.log(rows[0]["COUNT(users.facebook_id)"]);
+            var isUser = rows[0]["COUNT(users.facebook_id)"];
+
+            if (isUser == 1) { // user exists in database
+
+                // Step 1: check if user has working flower
+                var getWorkingFlr_queryStr = "SELECT flowers.id AS flower_id, flower_state_id FROM flowers" 
+                getWorkingFlr_queryStr += " LEFT JOIN users ON flowers.user_id = users.id"
+                getWorkingFlr_queryStr += " WHERE facebook_id='" + facebook_id + "' AND flower_state_id != 4";
+                console.log(getWorkingFlr_queryStr);
+
+                connection.query(getWorkingFlr_queryStr, function (err2, rows, fields) {
+                    if (err2) {
+                        response.status(500).send(err2);
+                    }
+                    else {
+                        console.log("success checking working flower");
+
+                        if (rows.length > 0) {
+                            // get the working flower and its current state
+                            var flower_id = rows[0]["flower_id"];
+                            var flower_state_id = rows[0]["flower_state_id"];
+
+                            // update the flower to its next state
+                            // invariant: we already checked the the working flower was not at state 4
+
+                            flower_state_id += 1; // move flower to next state
+                            var updateFlrState_queryStr = "UPDATE flowers SET flowers.flower_state_id = " + flower_state_id + "";
+                            updateFlrState_queryStr += " WHERE flowers.id = " + flower_id + "";
+
+                            connection.query(updateFlrState_queryStr, function (err3, rows, fields) {
+                                if (err3) {
+                                    response.status(500).send(err3);
+                                }
+                                else {
+                                    console.log("success updating working flower state");
+                                    return addToFlowerCare(request, response, flower_id, operation);
+                                }
+                            }); 
+                        }
+                        else {
+                            // otherwise insert a new working value into the database
+                            var newFlr_queryStr = "INSERT INTO flowers (user_id, flower_state_id)";
+                            newFlr_queryStr += " VALUES ((SELECT users.id FROM users where facebook_id='" + facebook_id + "'), ";
+                            newFlr_queryStr += "(SELECT flower_states.id from flower_states where state='seed'))"
+                            console.log(newFlr_queryStr);
+
+                            connection.query(newFlr_queryStr, function (err5, rows, fields) {
+                                if (err5) {
+                                    response.status(500).send(err5);
+                                }
+                                else {
+                                    console.log("success adding a new flower for new user");
+
+                                    // now get that working flower
+                                    // user working flower query from above (BAD invariant)
+
+                                    connection.query(getWorkingFlr_queryStr, function (err6, rows, fields) {
+                                        if (err6) {
+                                            response.status(500).send(err6);
+                                        }
+                                        else {
+                                            console.log("success getting working flower after added a new flower");
+
+                                            if (rows.length > 0) {
+                                                // get the working flower and its current state
+                                                var flower_id = rows[0]["flower_id"];
+                                                return addToFlowerCare(request, response, flower_id, operation);
+                                            }
+                                            else {
+                                                response.status(500).send("Error: bug in mySQL logic - line 418");
+                                            }
+                                        } 
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+            else {
+
+                response.status(400).send("Error: user does not exist in database");
+            }
+        }
+        else {
+            response.status(500).send(err);
+        }
+    });
+});
+
+// get working flower
+// example end URL .../workingflower?facebook_id=123456789
+app.get("/workingflower", function(request, response) {
+
+    // Step 1: get user from data
+    // identifier of user
+    var facebook_id = request.query.facebook_id;
+    // facebook_id = facebook_id.toString();
+    console.log(facebook_id);
+
+    // Step 2: check if query was empty
+    // if facebook_id is blank, return empty JSON object
+    if (request.query.facebook_id == 'undefined') {
+
+        var emptyObj = new Object ();
+        response.send(emptyObj);
+        return;
+    }
+
+    // query string for checking if user exists
+    var isUser_queryStr = "SELECT COUNT(users.facebook_id) FROM users WHERE facebook_id='" + facebook_id + "'";
+    console.log(isUser_queryStr);
+
+    connection.query(isUser_queryStr, function (err, rows, fields) {
+        if (!err) {
+            console.log(rows[0]["COUNT(users.facebook_id)"]);
+            var isUser = rows[0]["COUNT(users.facebook_id)"];
+
+            if (isUser == 1) { // user exists in database
+
+                // Step 1: check if user has working flower
+                var getWorkingFlr_queryStr = "SELECT flowers.id AS flower_id, flower_state_id FROM flowers" 
+                getWorkingFlr_queryStr += " LEFT JOIN users ON flowers.user_id = users.id"
+                getWorkingFlr_queryStr += " WHERE facebook_id='" + facebook_id + "' AND flower_state_id != 4";
+                console.log(getWorkingFlr_queryStr);
+
+                connection.query(getWorkingFlr_queryStr, function (err2, rows, fields) {
+                    if (err2) {
+                        response.status(500).send(err2);
+                    }
+                    else {
+                        console.log("success checking working flower");
+
+                        if (rows.length > 0) {
+                            // get the working flower and its current state
+                            var flower_state_id = rows[0]["flower_state_id"];
+
+                            var flr_state = {state : flower_state_id};
+                            response.send(flr_state);
+                        }
+                        else {
+                            // if no working flower, send an empty object
+                            // a seed needs to be planted
+                            response.send({});
+                        }
+                    }
+                });
+            }
+            else {
+                response.status(400).send("Error: user does not exist in database");
+            }
+        }
+        else {
+            response.status(500).send(err);
+        }
+    });
 });
 
 // Josie's test operations table
@@ -358,8 +558,6 @@ app.get("/flowerstate", function(request, response) {
 
 // Josie's test users table
 app.get("/users", function(request, response) {
-
-    connection.connect();
 
     connection.query('SELECT * FROM users ORDER BY id ASC', function (err, rows, fields) {
         if (err) {
