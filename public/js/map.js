@@ -19,7 +19,7 @@ function initMap() {
 function startMap(position) {
 
      request = new XMLHttpRequest();
-     request.open("get", "http://localhost:5000/locations", true);
+     request.open("get", "https://secure-plains-74726.herokuapp.com/locations", true);
      request.onreadystatechange = function() {
        if (request.status == 200 && request.readyState ==4) {
 
