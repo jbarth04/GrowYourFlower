@@ -462,7 +462,7 @@ app.post('/selfcare', allowCORS, function(request, response)
 
 // get working flower
 // example end URL .../workingflower?facebook_id=123456789
-app.get("/workingflower", function(request, response) {
+app.get("/workingflower", allowCORS, function(request, response) {
 
     // Step 1: get user from data
     // identifier of user

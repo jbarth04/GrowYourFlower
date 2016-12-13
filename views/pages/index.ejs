@@ -181,7 +181,9 @@ $(document).ready(function() {
 
 function updateActivity(activity) {
 
-    var urlGet = "http://localhost:5000/workingflower?facebook_id=" + facebook_id;
+    var urlGet = "https://secure-plains-74726.herokuapp.com/workingflower?facebook_id=" + facebook_id;
+    // var urlGet = "http://localhost:5000/workingflower?facebook_id=" + facebook_id;
+
     $.get(urlGet, function(data, textStatus){
       if (textStatus == 'success') {
 
@@ -192,8 +194,10 @@ function updateActivity(activity) {
            growFlower();
 
           var dataObj = {facebook_id : facebook_id, operation : activity};
-          var urlPost = "http://localhost:5000/selfcare";
-          // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+
+          // var urlPost = "http://localhost:5000/selfcare";
+          var urlPost = "https://secure-plains-74726.herokuapp.com/selfcare";
+
           $.post(urlPost, dataObj, function(data, textStatus) {
             if (textStatus == 'success') {
               console.log("index posted!");
