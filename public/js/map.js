@@ -1,4 +1,7 @@
 var request = new XMLHttpRequest();
+var infowindow = new google.maps.InfoWindow();
+var markers = [];
+
 
 function initMap() {
         //TODO
@@ -19,6 +22,7 @@ function startMap(position) {
      request.open("get", "http://localhost:5000/locations", true);
      request.onreadystatechange = function() {
        if (request.status == 200 && request.readyState ==4) {
+
          data = request.responseText;
          locations = JSON.parse(data);
          console.log(locations);
@@ -30,13 +34,19 @@ function startMap(position) {
                      //change to user[i].lon
                lng : locations[i]["lng"],
               };
-              var stopMarker = new google.maps.Marker({
+              var name = locations[i]["name"];
+
+              var Marker = new google.maps.Marker({
                 position: flowerpos,
                 map: map,
-                icon: "../images/blue-flower.png"
+                icon: "../images/blue-flower.png",
+                title: name
               });
 
+              markers += Marker;
+
          }
+
         }
       };
       request.send();
@@ -59,11 +69,14 @@ function startMap(position) {
     zoom: 15
   });
 
-  var myMarker = new google.maps.Marker({
+
+
+//marker for my curent location -> change to database query
+  /*var myMarker = new google.maps.Marker({
     position: mypos,
     map: map,
     icon: "../images/red-flower.png"
   });
-
+*/
 
 }
