@@ -12,25 +12,6 @@
   <script lang="javascript" src="./js/d3.min.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/flowergrowth.js"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-        console.log("in index.ejs");
-        // var data = '<%- JSON.stringify(data) %>';
-
-        // get data passed from server that rendered index.js
-        var data = '<%- data %>';
-        console.log(data);
-
-        // parse the data
-        data = JSON.parse(data);
-        console.log(data);
-
-        // get the facebook id
-        facebook_id = data["facebook_id"];
-        console.log(facebook_id);
-    });
-  </script>
 </head>
 
 <body background = "/images/sunny-day.jpeg">
@@ -38,11 +19,11 @@
     <h1>My Garden</h1>
     <h3>Complete these activities to care for you and your garden</h3>
 
-    &nbsp<button type="button" onclick="updateActivity()">I ate breakfast</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I saw a friend</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I exercised</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I made some art</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity()">I slept 7 hours or more</button>&nbsp
+    &nbsp<button type="button" onclick="updateActivity('ate')">I ate breakfast</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('friend')">I saw a friend</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('exercised')">I exercised</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('other')">I made some art</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('slept')">I slept 7 hours or more</button>&nbsp
   </div>
 
   <div id="garden"></div>
@@ -172,14 +153,41 @@
   // ***** FUNCTIONS ***** \\
  // *********************** \\
 
-  var flowerstage;
+// global flowerstage
+var flowerstage;
 
-  function updateActivity(activity) {
+// get initial flower
+$(document).ready(function() {
+    console.log("in index.ejs");
+    // var data = '<%- JSON.stringify(data) %>';
+
+    // get data passed from server that rendered index.js
+    var data = '<%- data %>';
+    console.log(data);
+
+    // parse the data
+    data = JSON.parse(data);
+    console.log(data);
+
+    // get the facebook id - global variable
+    facebook_id = data["facebook_id"];
+    console.log(facebook_id);
+
+    // get initial working flower before user clicks any self care buttons
+    // logging in or refreshing the page counts towards growing your flower
+    // and keeps the database in client in sync 
+    updateActivity('other');
+});
+
+function updateActivity(activity) {
+
     var urlGet = "http://localhost:5000/workingflower?facebook_id=" + facebook_id;
     $.get(urlGet, function(data, textStatus){
       if (textStatus == 'success') {
+
            console.log("index get!");
            flowerstage = data["state"];
+
            console.log("flowerstage = ", flowerstage);
            growFlower();
 
@@ -191,28 +199,43 @@
               console.log("index posted!");
             }
             else {
-                alert("oh no! Something went wrong...");
+                alert("oh no! Something went wrong in POST...");
             }
           });
        }
        else {
-           alert("oh no! Something went wrong...");
+           alert("oh no! Something went wrong in GET...");
        }
-    };
-  };
+    });
+}
 
   function growFlower(){
+
+    if(flowerstage == 4){
+        growBlossom();
+
+        setTimeout(function(){        
+            if (confirm('Would you like to plant another seed?')) {
+                location.reload(true); // hard refresh
+            } else {
+                // Do nothing!
+            }}, 5000);
+
+        console.log("after refresh"); // hard refresh
+        // plantSeed();
+      }
       if(flowerstage == 1){
         plantSeed();
+        // growSeedling();
       }
       if(flowerstage == 2){
         growSeedling();
+        // growBud();
       }
       if(flowerstage == 3){
+        // growSeedling();
         growBud();
-      }
-      if(flowerstage == 4){
-        growBlossom();
+        // growBlossom();
         console.log("growBlossom")
       }  
   };
@@ -224,6 +247,8 @@
   };
 
   function growSeedling(){
+    d3.select(".seed")
+        .attr("display", "block")
     d3.select(".seedling")
       .transition()
       .delay(500)

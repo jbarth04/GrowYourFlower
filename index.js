@@ -1,3 +1,4 @@
+
 var express = require('express');
 var app = express();
 var path = require('path');
@@ -148,8 +149,11 @@ app.get('/map', allowCORS, function(request, response) {
 function getAllUserLocs(request, response, next) 
 {
 
-    // query string for all locations of users
-    var userLocations_queryStr = "SELECT name, lat, lng FROM users";
+    // query string for all locations of users and current state of user working flower
+    var userLocations_queryStr = "SELECT users.name, users.lat, users.lng, flower_states.state"
+    userLocations_queryStr += " FROM users INNER JOIN flowers ON flowers.user_id = users.id"
+    userLocations_queryStr += " INNER JOIN flower_states ON flower_states.id = flowers.flower_state_id" 
+    userLocations_queryStr += " AND flowers.flower_state_id != 4"
     console.log(userLocations_queryStr);
 
     connection.query(userLocations_queryStr, function (err, rows, fields) {
@@ -508,8 +512,8 @@ app.get("/workingflower", function(request, response) {
                         }
                         else {
                             // if no working flower, send an empty object
-                            // a seed needs to be planted
-                            response.send({});
+                            // a seed needs to be planted, and the flower state is 4
+                            response.send({state : 4});
                         }
                     }
                 });
