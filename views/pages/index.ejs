@@ -12,16 +12,6 @@
   <script lang="javascript" src="./js/d3.min.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/flowergrowth.js"></script>
-
-  <script type="text/javascript">
-    $(document).ready(function() {
-
-        console.log("in index.ejs");
-        var data = '<%- JSON.stringify(data) %>';
-        console.log(data);
-
-    });
-  </script>
 </head>
 
 <body background = "/images/sunny-day.jpeg">
@@ -29,11 +19,11 @@
     <h1>My Garden</h1>
     <h3>Complete these activities to care for you and your garden</h3>
 
-    &nbsp<button type="button" onclick="updateActivity("ate")">I ate breakfast</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity("friend")">I saw a friend</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity("exercised")">I exercised</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity("other")">I made some art</button>&nbsp&nbsp
-    <button type="button" onclick="updateActivity("slept")">I slept 7 hours or more</button>&nbsp
+    &nbsp<button type="button" onclick="updateActivity('ate')">I ate breakfast</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('friend')">I saw a friend</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('exercised')">I exercised</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('other')">I made some art</button>&nbsp&nbsp
+    <button type="button" onclick="updateActivity('slept')">I slept 7 hours or more</button>&nbsp
   </div>
 
   <div id="garden"></div>
@@ -46,7 +36,6 @@
   var svg = d3.select('body').append('svg')
     .attr('width', xdimension)
     .attr('height', ydimension)
-    // .style('background-color', 'white');
 
     // earth bottom
   svg.append("rect")
@@ -58,14 +47,14 @@
     .attr("height", ydimension/3)
     .attr("x", 0)
     .attr("y", ydimension - ydimension/3)
-
+  
   var cx = Math.floor(Math.random() * ((xdimension - 20) - 20) + 20);
   var cy = Math.floor(Math.random() * ((ydimension - 20) - (ydimension - ydimension/3)) + (ydimension - ydimension/3));
 
   var colors = ['rgba(237,120,120,1)', 'rgba(255,167,167,1)', 'rgba(198, 72, 72,1)', 'rgba(164, 38, 38,1)'];
 
   var seed = svg.append("ellipse")
-    .attr("id", "seed")
+    .attr("class", "seed")
     .attr("cx", cx)
     .attr("cy", cy)
     .attr("rx", (.015 * dimension))
@@ -75,7 +64,7 @@
     .attr("display", "none")
 
   var seedling = svg.append("polygon")
-    .attr("id", "seedling")
+    .attr("class", "seedling")
     .attr("fill", "#439B43")
     .attr("stroke", "#439B43")
     .attr("display", "none")
@@ -94,7 +83,7 @@
              cx+","+(cy));
 
   var budStem = svg.append("polygon")
-    .attr("id", "bud")
+    .attr("class", "budStem")
     .attr("fill", "#439B43")
     .attr("stroke", "#439B43")
     .attr("display", "none")
@@ -127,33 +116,32 @@
   var petalColor = colors[Math.floor(Math.random() * colors.length)];
 
   var petal1 = svg.append("polygon")
-    .attr("class", "petal")
+    .attr("class", "petal1")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
     .attr("fill", petalColor)
 
   var petal2 = svg.append("polygon")
-    .attr("class", "petal")
+    .attr("class", "petal2")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
     .attr("fill", petalColor)
 
   var petal3 = svg.append("polygon")
-    .attr("class", "petal")
+    .attr("class", "petal3")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
     .attr("fill", petalColor)
 
   var petal4 = svg.append("polygon")
-    .attr("class", "petal")
+    .attr("class", "petal4")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
     .attr("fill", petalColor)
 
    var petal5 = svg.append("polygon")
-    .attr("class", "petal")
+    .attr("class", "petal5")
     .attr("points", cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275)+" "+cx+","+(cy-275))
     .attr("fill", petalColor)
 
-
   var bud = svg.append("ellipse")
-    .attr("id", "bud")
+    .attr("class", "bud")
     .attr("fill", "rgba(255,206,206,1)")
     .attr("stroke", "rgba(255,206,206,1)")
     .attr("cx", cx)
@@ -161,22 +149,107 @@
     .attr("rx", .5)
     .attr("ry", .2)
 
+   //*********************\\
   // ***** FUNCTIONS ***** \\
+ // *********************** \\
 
-  // nothing to seed
-  // if for user, flower state is nothing or blossomed, plantSeed(){}
-  d3.select("svg").on("click", function() {
-    seed
+// global flowerstage
+var flowerstage;
+
+// get initial flower
+$(document).ready(function() {
+    console.log("in index.ejs");
+    // var data = '<%- JSON.stringify(data) %>';
+
+    // get data passed from server that rendered index.js
+    var data = '<%- data %>';
+    console.log(data);
+
+    // parse the data
+    data = JSON.parse(data);
+    console.log(data);
+
+    // get the facebook id - global variable
+    facebook_id = data["facebook_id"];
+    console.log(facebook_id);
+
+    // get initial working flower before user clicks any self care buttons
+    // logging in or refreshing the page counts towards growing your flower
+    // and keeps the database in client in sync 
+    updateActivity('other');
+});
+
+function updateActivity(activity) {
+
+    var urlGet = "http://localhost:5000/workingflower?facebook_id=" + facebook_id;
+    $.get(urlGet, function(data, textStatus){
+      if (textStatus == 'success') {
+
+           console.log("index get!");
+           flowerstage = data["state"];
+
+           console.log("flowerstage = ", flowerstage);
+           growFlower();
+
+          var dataObj = {facebook_id : facebook_id, operation : activity};
+          var urlPost = "http://localhost:5000/selfcare";
+          // var url = "http://secure-plains-74726.herokuapp.com/facebookData.json";
+          $.post(urlPost, dataObj, function(data, textStatus) {
+            if (textStatus == 'success') {
+              console.log("index posted!");
+            }
+            else {
+                alert("oh no! Something went wrong in POST...");
+            }
+          });
+       }
+       else {
+           alert("oh no! Something went wrong in GET...");
+       }
+    });
+}
+
+  function growFlower(){
+
+    if(flowerstage == 4){
+        growBlossom();
+
+        setTimeout(function(){        
+            if (confirm('Would you like to plant another seed?')) {
+                location.reload(true); // hard refresh
+            } else {
+                // Do nothing!
+            }}, 5000);
+
+        console.log("after refresh"); // hard refresh
+        // plantSeed();
+      }
+      if(flowerstage == 1){
+        plantSeed();
+        // growSeedling();
+      }
+      if(flowerstage == 2){
+        growSeedling();
+        // growBud();
+      }
+      if(flowerstage == 3){
+        // growSeedling();
+        growBud();
+        // growBlossom();
+        console.log("growBlossom")
+      }  
+  };
+
+  function plantSeed() {
+    d3.select(".seed")
     .attr("display", "block")
-  });
+    console.log("display seed")
+  };
 
-
-  // seed to seedling
-  d3.select("svg").on("click", function() {
-    seed
-    .attr("display", "block")
-
-    seedling
+  function growSeedling(){
+    d3.select(".seed")
+        .attr("display", "block")
+    d3.select(".seedling")
       .transition()
       .delay(500)
       .duration(1500)
@@ -196,14 +269,14 @@
               (cx+8)+","+(cy-10)+" "+
               (cx+3)+","+(cy-4)+" "+
                cx+","+(cy+2));
-  });
+  };
 
-  // seedling to bud
-  d3.select("svg").on("click", function() {
-    budStem
+  function growBud(){
+    d3.select(".budStem")
       .transition()
       .delay(50)
       .duration(2000)
+      .attr("display", "block")
       .attr("points",  cx+","+(cy-2)+" "+
                cx+","+(cy-10)+" "+
                cx+","+(cy-20)+" "+
@@ -230,44 +303,51 @@
               (cx+8)+","+(cy-10)+" "+
               (cx+3)+","+(cy-4)+" "+
                cx+","+(cy+2));
-    bud
+    d3.select(".bud")
       .transition()
       .delay(1500)
       .duration(800)
+      .attr("display", "block")
       .attr("cx", cx -2)
       .attr("cy", cy - 280)
       .attr("rx", 8)
       .attr("ry", 10)
-  });
+  };
+  
 
-  // bud to flower
-  d3.select("svg").on("click", function() {
-    petal1
+  function growBlossom(){
+    d3.select(".petal1")
       .transition()
       .delay(1500)
       .duration(1000)
-      .attr("points", cx+","+(cy-275)+" "+(cx-8)+","+((cy-275)-14)+" "+(cx-10)+","+((cy-275)-32)+" "+cx+","+((cy-275)-42)+" "+(cx+12)+","+((cy-275)-38)+" "+(cx+12)+","+((cy-275)-18)+" "+cx+","+(cy-275));
-    petal2
+      .attr("display", "block")
+      .attr("points", cx+","+(cy-275)+" "+(cx-8)+","+((cy-275)-14)+" "+(cx-10)+","+((cy-275)-32)+" "+cx+","+((cy-275)-42)+" "+(cx+12)+","+((cy-275)-38)+" "+(cx+12)+","+((cy-275)-18)+" "+cx+","+(cy-275)); 
+    d3.select(".petal2")
       .transition()
       .delay(1500)
       .duration(2000)
-      .attr("points", (cx-5)+","+(cy-275)+" "+(cx-16)+","+((cy-275)-10)+" "+(cx-24)+","+((cy-275)-18)+" "+(cx-36)+","+((cy-275)-12)+" "+(cx-46)+","+(cy-275)+" "+(cx-36)+","+((cy-275)+18)+" "+(cx-20)+","+((cy-275)+14)+" "+(cx-5)+","+(cy-275));
-    petal3
+      .attr("display", "block")
+      .attr("points", (cx-5)+","+(cy-275)+" "+(cx-16)+","+((cy-275)-10)+" "+(cx-24)+","+((cy-275)-18)+" "+(cx-36)+","+((cy-275)-12)+" "+(cx-46)+","+(cy-275)+" "+(cx-36)+","+((cy-275)+18)+" "+(cx-20)+","+((cy-275)+14)+" "+(cx-5)+","+(cy-275));  
+    d3.select(".petal3")
       .transition()
       .delay(1500)
       .duration(3000)
+      .attr("display", "block")
       .attr("points", (cx-2)+","+((cy-275)+2)+" "+(cx-16)+","+((cy-275)+10)+" "+(cx-22)+","+((cy-275)+16)+" "+(cx-30)+","+((cy-275)+24)+" "+(cx-32)+","+((cy-275)+46)+" "+(cx-14)+","+((cy-275)+38)+" "+(cx-2)+","+((cy-275)+16)+" "+(cx-2)+","+((cy-275)+2));
-    petal4
+    d3.select(".petal4")
       .transition()
       .delay(1500)
       .duration(3500)
+      .attr("display", "block")
       .attr("points", (cx+2)+","+((cy-275)+6)+" "+(cx+2)+","+((cy-275)+18)+" "+(cx+6)+","+((cy-275)+30)+" "+(cx+18)+","+((cy-275)+38)+" "+(cx+32)+","+((cy-275)+44)+" "+(cx+28)+","+((cy-275)+24)+" "+(cx+24)+","+((cy-275)+12)+" "+(cx+18)+","+((cy-275)+8)+" "+(cx+2)+","+((cy-275)+6));
-    petal5
+    d3.select(".petal5")
       .transition()
       .delay(1500)
       .duration(4000)
+      .attr("display", "block")
       .attr("points", (cx+4)+","+(cy-275)+" "+(cx+10)+","+((cy-275)-10)+" "+(cx+16)+","+((cy-275)-14)+" "+(cx+26)+","+((cy-275)-18)+" "+(cx+44)+","+((cy-275)-5)+" "+(cx+32)+","+((cy-275)+6)+" "+(cx+22)+","+((cy-275)+8)+" "+(cx+14)+","+((cy-275)+6)+" "+(cx+4)+","+(cy-275));
-  });
+  };
+
   </script>
 </body>
 </html>
