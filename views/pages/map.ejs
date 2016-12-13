@@ -12,16 +12,25 @@
       }
       #canvas_map {
         height: 100%;
+        z-index: -1;
+      }
+      #backgroundOverlay {
+          margin-top: 150px;
+          margin-bottom: 100px;
+          padding: 20px;
+          position: absolute;
+          text-align: center;
+          width: 100%;
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=true"></script>
     <script src="../../js/map.js"></script>
+    <link rel="stylesheet" href="/stylesheets/main.css" type="text/css"/>
 
 
   </head>
   <body onload="initMap()" >
-    <div id="canvas_map"></div>s
-
-
+    <div id=backgroundOverlay><h1>Community Garden</h1><h3>Hover to see your friend's status</h3><a href="/index" id="navbutton">Back to My Garden ></a><br></div>
+    <div id="canvas_map"></div>
   </body>
 </html>
