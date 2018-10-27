@@ -24,11 +24,11 @@ app.use(bodyParser.urlencoded({ extended: true })); // Required if we need to us
 var mysql = require('mysql');
 
 var db_config = {
-  host: 'us-cdbr-iron-east-04.cleardb.net',
-  port: '3306',
-  user: 'b0bef3f366c73f',
-  password : '221b30e5',
-  database : 'heroku_2a6e207ec694c9c'
+  host: process.env.DATABASE_HOST,
+  port: process.env.DATABASE_PORT,
+  user: process.env.DATABASE_USER,
+  password : process.env.DATABASE_PASSWORD,
+  database : process.env.DATABASE
 };
 
 // The following is taken from:
